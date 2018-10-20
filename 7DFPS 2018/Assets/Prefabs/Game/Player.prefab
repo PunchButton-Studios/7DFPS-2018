@@ -197,10 +197,17 @@ MonoBehaviour:
   lookSpeed: 1
   lookMinAngle: -85
   lookMaxAngle: 85
-  activatableMask:
-    serializedVersion: 2
-    m_Bits: 512
+  gravity: 9.8
+  maxFallSpeed: 20
   maxActivateRange: 2.5
+  gui: {fileID: 0}
+  anxiety: 0
+  maxAnxiety: 128
+  darknessAnxiety: 1
+  lampMask:
+    serializedVersion: 2
+    m_Bits: 0
+  lightCheckRange: 16
 --- !u!143 &143574555526646670
 CharacterController:
   m_ObjectHideFlags: 1

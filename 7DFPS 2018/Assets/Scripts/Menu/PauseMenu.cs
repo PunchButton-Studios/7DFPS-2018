@@ -1,10 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PauseMenu : MonoBehaviour
 {
     public GameObject canvas;
+    public string mainMenuScene;
 
     private void Reset()
     {
@@ -13,7 +15,7 @@ public class PauseMenu : MonoBehaviour
 
     private void Start()
     {
-        GameManager.pauseEvent += OnPauseChange;
+        GameManager.Main.pauseEvent += OnPauseChange;
         canvas.SetActive(GameManager.GamePaused);
     }
 
@@ -21,5 +23,10 @@ public class PauseMenu : MonoBehaviour
 
     public void ResumeButton() => GameManager.GamePaused = false;
 
-    public void ExitGameButton() => Application.Quit();
+    public void ExitGameButton()
+    {
+        GameManager.Main.SaveGame();
+        Time.timeScale = 1.0f;
+        SceneManager.LoadScene(mainMenuScene, LoadSceneMode.Single);
+    }
 }

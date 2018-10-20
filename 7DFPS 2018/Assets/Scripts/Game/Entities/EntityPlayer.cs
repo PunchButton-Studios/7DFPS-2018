@@ -41,9 +41,25 @@ public class EntityPlayer : Entity
         this.gui = GetComponentInChildren<PlayerGUI>();
     }
 
-    protected override void Start()
+    protected override void Awake()
     {
-        base.Start();
+        GameManager.Main.loadGameEvent += OnGameLoaded;
+        GameManager.Main.saveGameEvent += OnGameSave;
+    }
+
+    private void OnGameSave(SaveData saveData)
+    {
+        saveData.playerData.anxiety = this.anxiety;
+        saveData.playerData.position = transform.position;
+        saveData.playerData.rotation = Quaternion.Euler(lookXAngle, transform.rotation.eulerAngles.y, 0.0f);
+    }
+
+    private void OnGameLoaded(SaveData saveData)
+    {
+        this.anxiety = saveData.playerData.anxiety;
+        transform.position = saveData.playerData.position;
+        transform.rotation = Quaternion.Euler(0.0f, saveData.playerData.rotation.eulerAngles.y, 0.0f);
+        lookXAngle = saveData.playerData.rotation.eulerAngles.x;
     }
 
     protected override void Update()

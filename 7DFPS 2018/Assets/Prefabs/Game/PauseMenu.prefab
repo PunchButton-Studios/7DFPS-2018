@@ -440,6 +440,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canvas: {fileID: 1351838169818772}
+  mainMenuScene: Main Menu
 --- !u!114 &114627090601126840
 MonoBehaviour:
   m_ObjectHideFlags: 1
