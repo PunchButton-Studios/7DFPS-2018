@@ -20,6 +20,10 @@ public class EntityPlayer : Entity
     private float lookXAngle = 0.0f;
     public float lookMinAngle = -85.0f, lookMaxAngle = 85.0f;
 
+    private float fallSpeed = 0.0f;
+    public float gravity = 9.8f;
+    public float maxFallSpeed = 20.0f;
+
     [Header("Action")]
     public float maxActivateRange = 2.5f;
     public PlayerGUI gui;
@@ -49,6 +53,7 @@ public class EntityPlayer : Entity
             return;
         Move();
         Look();
+        Fall();
         Action(activatable);
     }
 
@@ -77,6 +82,19 @@ public class EntityPlayer : Entity
         lookXAngle -= mouseY * lookSpeed;
         lookXAngle = Mathf.Clamp(lookXAngle, lookMinAngle, lookMaxAngle);
         head.transform.localRotation = Quaternion.Euler(lookXAngle, 0, 0);
+    }
+
+    private void Fall()
+    {
+        if (controller.isGrounded)
+            fallSpeed = 0.0f;
+        else
+        {
+            fallSpeed += gravity * Time.deltaTime;
+            if (fallSpeed > maxFallSpeed)
+                fallSpeed = maxFallSpeed;
+            controller.Move(new Vector3(0, -fallSpeed, 0));
+        }
     }
     #endregion
     #region Action

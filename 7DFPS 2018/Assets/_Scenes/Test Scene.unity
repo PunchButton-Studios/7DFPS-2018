@@ -281,6 +281,16 @@ Prefab:
       propertyPath: gui
       value: 
       objectReference: {fileID: 1110864292}
+    - target: {fileID: 114738666737656568, guid: fda47d9282d1c8f4aa924672d40bed43,
+        type: 2}
+      propertyPath: gravity
+      value: 0.98
+      objectReference: {fileID: 0}
+    - target: {fileID: 114738666737656568, guid: fda47d9282d1c8f4aa924672d40bed43,
+        type: 2}
+      propertyPath: maxFallSpeed
+      value: 5
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 114157266368062732, guid: fda47d9282d1c8f4aa924672d40bed43, type: 2}
   m_SourcePrefab: {fileID: 100100000, guid: fda47d9282d1c8f4aa924672d40bed43, type: 2}
