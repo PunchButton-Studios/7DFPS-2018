@@ -35,6 +35,7 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
         gameObject.AddComponent<DebugHandler>();
     }
 
@@ -53,6 +54,7 @@ public class GameManager : MonoBehaviour
             oldTimescale = Time.timeScale;
         Time.timeScale = pauseState ? 0.0f : oldTimescale;
         Cursor.lockState = pauseState ? CursorLockMode.None : CursorLockMode.Locked;
+        Cursor.visible = pauseState;
 
         isPaused = pauseState;
         pauseEvent?.Invoke(pauseState);
