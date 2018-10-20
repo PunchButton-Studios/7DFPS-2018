@@ -8,8 +8,9 @@ public class PlayerGUI : MonoBehaviour
     public Reticle reticle;
     public GameObject targetTextObject;
     public Text targetText;
+    public Image anxietyOverlay;
 
-    public void UpdateGUI(Activatable targetActivatable)
+    public void UpdateGUI(Activatable targetActivatable, EntityPlayer player)
     {
         reticle.active = targetActivatable != null;
         targetTextObject.SetActive(targetActivatable != null);
@@ -18,5 +19,14 @@ public class PlayerGUI : MonoBehaviour
         {
             targetText.text = targetActivatable.ActivateInfo;
         }
+
+        UpdateAnxiety(player.anxiety, player.maxAnxiety);
+    }
+
+    public void UpdateAnxiety(float anxiety, float maxAnxiety)
+    {
+        Color c = anxietyOverlay.color;
+        c.a = anxiety / maxAnxiety;
+        anxietyOverlay.color = c;
     }
 }
