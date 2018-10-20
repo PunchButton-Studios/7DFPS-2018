@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class Entity : MonoBehaviour
+public abstract class Entity : MonoBehaviour
 {
     protected virtual void Start()
     {
