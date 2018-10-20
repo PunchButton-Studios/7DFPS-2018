@@ -12,7 +12,9 @@ public class LoadGameMenu : MonoBehaviour
     private SaveMenuEntry selectedEntry;
     public Color selectedEntryColor, unselectedEntryColor;
 
-    public Button loadButton;
+    public Button loadButton, deleteButton;
+
+    public GameObject deleteConfirmationPanel;
 
     public SaveMenuEntry SelectedEntry
     {
@@ -30,7 +32,7 @@ public class LoadGameMenu : MonoBehaviour
             if (selectedEntry != null)
                 selectedEntry.GetComponent<Image>().color = selectedEntryColor;
 
-            loadButton.interactable = selectedEntry != null;
+            loadButton.interactable = deleteButton.interactable = selectedEntry != null;
         }
     }
 
@@ -70,7 +72,16 @@ public class LoadGameMenu : MonoBehaviour
             saveMenuEntries.Add(saveMenuEntry);
             saveMenuEntry.GetComponent<Image>().color = unselectedEntryColor;
         }
+
+        loadButton.interactable = deleteButton.interactable = selectedEntry != null;
     }
 
     public void LoadButton() => FindObjectOfType<MainMenu>().LoadGame(SelectedEntry.saveNameText.text);
+
+    public void DeleteButton()
+    {
+        deleteConfirmationPanel.SetActive(true);
+        deleteConfirmationPanel.GetComponent<DeleteSaveMenu>().SetTarget(SelectedEntry.saveNameText.text);
+        gameObject.SetActive(false);
+    }
 }
