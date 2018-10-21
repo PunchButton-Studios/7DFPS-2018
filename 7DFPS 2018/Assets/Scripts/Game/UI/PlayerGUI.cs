@@ -18,6 +18,7 @@ public class PlayerGUI : MonoBehaviour
         if (targetActivatable != null)
         {
             targetText.text = targetActivatable.ActivateInfo;
+            LayoutRebuilder.ForceRebuildLayoutImmediate(targetText.rectTransform);
         }
 
         UpdateAnxiety(player.anxiety, player.maxAnxiety);
