@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 224189386737648292}
   - component: {fileID: 222291934720922890}
   - component: {fileID: 114681507670595366}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Reticle_BR
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -38,7 +38,7 @@ GameObject:
   - component: {fileID: 4652609862889248}
   - component: {fileID: 20807251510460130}
   - component: {fileID: 81080710574428386}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: PlayerCam
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
@@ -55,7 +55,7 @@ GameObject:
   - component: {fileID: 224362442624302690}
   - component: {fileID: 222800897254130074}
   - component: {fileID: 114484908960439404}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Reticle_TL
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -73,7 +73,7 @@ GameObject:
   - component: {fileID: 222726710417190024}
   - component: {fileID: 114139287449934982}
   - component: {fileID: 114061644824319998}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: TargetInfo Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -90,7 +90,7 @@ GameObject:
   - component: {fileID: 224700174592570296}
   - component: {fileID: 222300065171333602}
   - component: {fileID: 114379199582831544}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Reticle_TR
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -107,7 +107,7 @@ GameObject:
   - component: {fileID: 224606960380420338}
   - component: {fileID: 222095632819779280}
   - component: {fileID: 114305396880531562}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Reticle_BL
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -126,7 +126,7 @@ GameObject:
   - component: {fileID: 114072147109853014}
   - component: {fileID: 114608949426343642}
   - component: {fileID: 114206032217707614}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: TargetInfo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -142,7 +142,7 @@ GameObject:
   m_Component:
   - component: {fileID: 224234923071593808}
   - component: {fileID: 114614746852148582}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Reticle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -159,7 +159,7 @@ GameObject:
   - component: {fileID: 224420868526374862}
   - component: {fileID: 222076342781818274}
   - component: {fileID: 114273996915686642}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Anxiety Overlay
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -176,7 +176,7 @@ GameObject:
   - component: {fileID: 4642867996469832}
   - component: {fileID: 143574555526646670}
   - component: {fileID: 114738666737656568}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 2800000, guid: 488a8af2aa13b4d4a989dd0836efbce9, type: 3}
@@ -194,7 +194,7 @@ GameObject:
   - component: {fileID: 223705363881075262}
   - component: {fileID: 114532441760198096}
   - component: {fileID: 114241329304587476}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: PlayerGUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -600,6 +600,9 @@ MonoBehaviour:
   gravity: 0.98
   maxFallSpeed: 5
   maxActivateRange: 2.5
+  activationMask:
+    serializedVersion: 2
+    m_Bits: 823
   gui: {fileID: 114241329304587476}
   anxiety: 0
   maxAnxiety: 128

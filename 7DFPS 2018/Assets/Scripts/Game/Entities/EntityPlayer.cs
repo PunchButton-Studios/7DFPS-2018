@@ -26,6 +26,7 @@ public class EntityPlayer : Entity
 
     [Header("Action")]
     public float maxActivateRange = 2.5f;
+    public LayerMask activationMask;
     public PlayerGUI gui;
 
     [Header("Anxiety")]
@@ -127,7 +128,7 @@ public class EntityPlayer : Entity
     private Activatable GetActivatable()
     {
         RaycastHit hit;
-        if (Physics.Raycast(head.position, head.forward, out hit, maxActivateRange))
+        if (Physics.Raycast(head.position, head.forward, out hit, maxActivateRange, activationMask))
         {
             Activatable activatable = hit.collider.GetComponent<Activatable>();
             if (activatable != null && activatable.CanBeActivated(this))
