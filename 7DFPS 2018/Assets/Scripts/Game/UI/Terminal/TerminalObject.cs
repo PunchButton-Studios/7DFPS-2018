@@ -7,6 +7,7 @@ public class TerminalObject : MonoBehaviour
 {
     public BaseObject baseObject;
     private TerminalUI parent;
+    public bool alreadyInSlot;
 
     public GameObject oreCost;
     public Text oreCostText;
@@ -14,10 +15,11 @@ public class TerminalObject : MonoBehaviour
     public Image previewImage;
     public Text nameText;
 
-    public void Setup(BaseObject baseObject, TerminalUI parent)
+    public void Setup(BaseObject baseObject, TerminalUI parent, bool alreadyInSlot)
     {
         this.baseObject = baseObject;
         this.parent = parent;
+        this.alreadyInSlot = alreadyInSlot;
 
         if (baseObject.oreCost == 0)
             oreCost.SetActive(false);

@@ -117,17 +117,19 @@ public class TerminalUI : MonoBehaviour, ICloseableMenu
                 GameObject entry = Instantiate(objectEntryPrefab, objectContent);
                 TerminalObject terminalObject = entry.GetComponent<TerminalObject>();
                 BaseObject targetObject = baseObject;
+                bool alreadyInSlot = false;
 
-                if(currentObject == baseObject)
+                if (currentObject != null && currentObject.Equals(baseObject))
                 {
                     SelectedObjectEntry = terminalObject;
                     targetObject = targetObject.Copy();
-                    targetObject.oreCost -= currentObject.oreCost;
+                    targetObject.oreCost = 0;
+                    alreadyInSlot = true;
                 }
                 else
                     entry.GetComponent<Image>().color = unselectedColor;
 
-                terminalObject.Setup(targetObject, this);
+                terminalObject.Setup(targetObject, this, alreadyInSlot);
 
                 entry.GetComponent<Button>().interactable = baseObject.CanAfford();
                 objectEntries.Add(entry);
@@ -137,14 +139,17 @@ public class TerminalUI : MonoBehaviour, ICloseableMenu
 
     public void CreateButton()
     {
-        BaseSlot targetSlot;
-        if (targetSlotIsWallSlot)
-            targetSlot = terminal.wallSlots[slotId];
-        else
-            targetSlot = terminal.groundSlots[slotId];
+        if (!SelectedObjectEntry.alreadyInSlot)
+        {
+            BaseSlot targetSlot;
+            if (targetSlotIsWallSlot)
+                targetSlot = terminal.wallSlots[slotId];
+            else
+                targetSlot = terminal.groundSlots[slotId];
 
-        targetSlot.BaseObject = SelectedObjectEntry.baseObject;
-        BaseController.Main.ore -= targetSlot.BaseObject.oreCost;
+            targetSlot.BaseObject = SelectedObjectEntry.baseObject;
+            BaseController.Main.ore -= targetSlot.BaseObject.oreCost;
+        }
         Close();
     }
 }
