@@ -77,7 +77,11 @@ public class GameManager : MonoBehaviour
             if(activeMenu != null)
                 activeMenu.Close();
             else
-                Pause(!isPaused);
+            {
+                PauseMenu pauseMenu = FindObjectOfType<PauseMenu>();
+                pauseMenu.canvas.SetActive(true);
+                OpenMenu(pauseMenu);
+            }
         }
     }
 
