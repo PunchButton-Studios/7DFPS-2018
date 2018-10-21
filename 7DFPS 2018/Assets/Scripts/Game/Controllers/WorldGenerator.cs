@@ -1,167 +1,182 @@
-﻿using System.Linq;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class WorldGenerator : MonoBehaviour
 {
-    public Room[] rooms;
-    private List<SaveData.WorldData.RoomData> roomData = new List<SaveData.WorldData.RoomData>();
+    private bool[] map;
+    private int mapSize;
 
-    public float roomScale = 1.0f;
+    public GameObject floorPrefab, wallPrefab;
+
+    public float scale = 1.0f;
+
+    [Range(0, 1)] public float pathStopChance = 0.0025f;
+    [Range(0, 1)] public float pathBendChance = 0.05f;
+    [Range(0, 1)] public float pathSplitChance = 0.07f;
 
     private void Awake()
     {
         GameManager.Main.saveGameEvent += OnSaveGame;
-        GameManager.Main.loadGameEvent += OnLoadGame;
+        GameManager.Main.loadGameEvent += OnGameLoaded;
     }
 
-    private void OnLoadGame(SaveData saveData)
+    private void OnGameLoaded(SaveData saveData)
     {
-        foreach(SaveData.WorldData.RoomData rd in saveData.worldData.roomData)
-        {
-            Room room = rooms[rd.id];
-            Instantiate(room.roomPrefab, rd.position, Quaternion.identity);
-            roomData.Add(rd);
-        }
+        map = saveData.worldData.map;
+        PlaceTiles(saveData.worldData.mapSize);
     }
 
     private void OnSaveGame(SaveData saveData)
     {
-        saveData.worldData.roomData = this.roomData.ToArray();
+        saveData.worldData.map = map;
+        saveData.worldData.mapSize = mapSize;
     }
 
     public void GenerateLevel(int size)
     {
-        Vector2Int startPos = new Vector2Int(0, 0);
+        Vector2Int startPos = new Vector2Int(Random.Range(0, size - 1), Random.Range(0, size - 1));
         GenerateLevel(size, startPos, true);
     }
 
     public void GenerateLevel(int size, Vector2Int startPos, bool startPosBaseRoom = false)
     {
-        Dictionary<Vector2Int, bool> map = new Dictionary<Vector2Int, bool>();
-        bool hasEndPoint = false;
+        map = new bool[size * size];
+        this.mapSize = size;
+        Queue<QueuedTile> queuedTiles = new Queue<QueuedTile>();
 
-        Queue<Vector2Int> roomQueue = new Queue<Vector2Int>();
-
-        if (startPosBaseRoom)
+        if(startPosBaseRoom)
         {
-            Room[] baseRooms = rooms.Where((r) => r.canPlaceBase).ToArray();
-            WeightedRandom<Room>.Item[] baseItems = new WeightedRandom<Room>.Item[baseRooms.Length];
-            for (int i = 0; i < baseItems.Length; i++)
-                baseItems[i] = new WeightedRandom<Room>.Item(baseRooms[i], baseRooms[i].weight);
-            PlaceRandomRoom(startPos, baseItems, ref map, ref roomQueue);
+            if (startPos.x > (size - 3))
+                startPos.x -= 3;
+            else if (startPos.x < 3)
+                startPos.x += 3;
+
+            if (startPos.y > (size - 3))
+                startPos.y -= 3;
+            else if (startPos.y < 3)
+                startPos.y += 3;
+
+            //GenerateRoom(startPos, new Vector2Int(3, 3), size);
         }
 
-        WeightedRandom<Room>.Item[] items = new WeightedRandom<Room>.Item[rooms.Length];
-        for (int i = 0; i < items.Length; i++)
-            items[i] = new WeightedRandom<Room>.Item(rooms[i], rooms[i].weight);
+        Vector2Int direction = new Vector2Int(0, 0);
 
-        while (roomQueue.Count > 0)
+        if (Random.value < 0.5f)
+            direction.x = (startPos.x < size * 0.5) ? 1 : -1;
+        else
+            direction.y = (startPos.y < size * 0.5) ? 1 : -1;
+
+        queuedTiles.Enqueue(new QueuedTile(startPos, direction));
+
+        while (queuedTiles.Count > 0)
         {
-            Vector2Int pos = roomQueue.Dequeue();
-            if (pos.magnitude < size)
-                PlaceRandomRoom(pos, items, ref map, ref roomQueue);
+            QueuedTile queuedTile = queuedTiles.Dequeue();
+            GeneratePath(queuedTile.pos, queuedTile.direction, size, ref queuedTiles);
         }
+
+        PlaceTiles(size);
     }
 
-    private void PlaceRandomRoom(Vector2Int pos, IEnumerable<WeightedRandom<Room>.Item> collection, ref Dictionary<Vector2Int, bool> map, ref Queue<Vector2Int> queue)
+    private void GeneratePath(Vector2Int pos, Vector2Int direction, int mapSize, ref Queue<QueuedTile> queuedTiles)
     {
-        if (map.ContainsKey(pos))
+        int i = pos.x + (pos.y * mapSize);
+        if (i < 0 || i >= map.Length || map[i])
             return;
 
-        Room selectedRoom = null;
-        Vector2Int size = new Vector2Int();
-        while (selectedRoom == null)
-        {
-            selectedRoom = WeightedRandom<Room>.GetRandom(collection);
-            size = GetSize(selectedRoom.size);
+        map[i] = true;
 
-            for (int x = 0; x < size.x; x++)
+        if(Random.value >= pathStopChance)
+        {
+            Vector2Int newDirection = direction;
+            Vector2Int nextPosition = pos + newDirection;
+
+            if (Random.value < pathBendChance)
             {
-                for (int y = 0; y < size.y; y++)
+                newDirection = RotateVector2Int(newDirection, Random.value < 0.5f);
+                nextPosition = pos + newDirection;
+            }
+
+            if(Random.value < pathSplitChance)
+            {
+                bool clockwiseSplit = Random.value < 0.5f;
+                Vector2Int splitDirection = RotateVector2Int(newDirection, clockwiseSplit);
+                Vector2Int splitPosition = pos + splitDirection;
+                if (!IsOutOfBounds(splitPosition, mapSize))
+                    queuedTiles.Enqueue(new QueuedTile(splitPosition, splitDirection));
+
+                if(Random.value < pathSplitChance)
                 {
-                    if (map.ContainsKey(pos + new Vector2Int(x, y)))
-                    {
-                        selectedRoom = null;
-                        break;
-                    }
+                    splitDirection = RotateVector2Int(newDirection, !clockwiseSplit);
+                    splitPosition = pos + splitDirection;
+                    if (!IsOutOfBounds(splitPosition, mapSize))
+                        queuedTiles.Enqueue(new QueuedTile(splitPosition, splitDirection));
                 }
-                if (selectedRoom == null)
-                    break;
             }
-        }
-        Vector3 worldPosition = new Vector3(pos.x * roomScale, 0, pos.y * roomScale);
-        Instantiate(selectedRoom.roomPrefab, worldPosition, Quaternion.identity);
-        roomData.Add(new SaveData.WorldData.RoomData() { id = System.Array.IndexOf(rooms, selectedRoom), position = worldPosition });
 
-        for (int x = 0; x < size.x; x++)
-        {
-            for (int y = 0; y < size.y; y++)
-                map.Add(pos + new Vector2Int(x, y), true);
-        }
-
-        Vector2Int center = GetCenter(selectedRoom.size);
-        int offset = GetNextRoomOffset(selectedRoom.size);
-        for (int s = 0; s < 4; s++)
-        {
-            Room.Sides side = (Room.Sides)(1 << s);
-            if (selectedRoom.doorways.HasFlag(side))
+            int attempts = 0;
+            while (IsOutOfBounds(nextPosition, mapSize) && attempts < 4)
             {
-                Vector2Int direction = GetDirection(side);
-                Vector2Int nextRoom = pos + center + (direction * offset);
-                if (!map.ContainsKey(nextRoom))
-                    queue.Enqueue(nextRoom);
+                newDirection = RotateVector2Int(newDirection, true);
+                nextPosition = pos + newDirection;
+                attempts++;
+            }
+
+            if (!IsOutOfBounds(nextPosition, mapSize))
+                queuedTiles.Enqueue(new QueuedTile(nextPosition, newDirection));
+        }
+    }
+
+    private void GenerateRoom(Vector2Int pos, Vector2Int size, int mapSize)
+    {
+        for(int lx = 0; lx < size.x; lx++)
+        {
+            for(int ly = 0; ly < size.y; ly++)
+            {
+                int x = pos.x + lx;
+                int y = pos.y + ly;
+
+                int i = x + (y * mapSize);
+
+                if (i < map.Length && i > 0)
+                    map[i] = true;
             }
         }
     }
 
-    private Vector2Int GetSize(Room.RoomSize roomSize)
+    private bool IsOutOfBounds(Vector2Int pos, int mapSize) => pos.x < 0 || pos.x >= mapSize || pos.y < 0 || pos.y >= mapSize;
+
+    private Vector2Int RotateVector2Int(Vector2Int v2Int, bool clockwise)
     {
-        switch (roomSize)
+        if (clockwise)
+            return new Vector2Int(v2Int.y, -v2Int.x);
+        else
+            return new Vector2Int(-v2Int.y, v2Int.x);
+    }
+
+    private void PlaceTiles(int mapSize)
+    {
+        for(int y = 0; y < mapSize; y++)
         {
-            case Room.RoomSize.Big:
-                return new Vector2Int(3, 3);
-            default:
-                return new Vector2Int(1, 1);
+            for(int x = 0; x < mapSize; x++)
+            {
+                if (map[x + (y * mapSize)])
+                {
+                    Vector3 worldPosition = new Vector3(x, 0, y) * scale;
+                    Instantiate(floorPrefab, worldPosition, Quaternion.identity);
+                }
+            }
         }
     }
 
-    private Vector2Int GetCenter(Room.RoomSize roomSize)
+    private struct QueuedTile
     {
-        switch (roomSize)
-        {
-            case Room.RoomSize.Big:
-                return new Vector2Int(1, 1);
-            default:
-                return new Vector2Int(0, 0);
-        }
-    }
+        public Vector2Int pos, direction;
 
-    private int GetNextRoomOffset(Room.RoomSize roomSize)
-    {
-        switch (roomSize)
+        public QueuedTile(Vector2Int position, Vector2Int direction)
         {
-            case Room.RoomSize.Big:
-                return 2;
-            default:
-                return 1;
-        }
-    }
-
-    private Vector2Int GetDirection(Room.Sides side)
-    {
-        switch (side)
-        {
-            case Room.Sides.North:
-                return new Vector2Int(0, 1);
-            case Room.Sides.South:
-                return new Vector2Int(0, -1);
-            case Room.Sides.East:
-                return new Vector2Int(1, 0);
-            case Room.Sides.West:
-                return new Vector2Int(-1, 0);
-            default:
-                return new Vector2Int();
+            this.pos = position;
+            this.direction = direction;
         }
     }
 }

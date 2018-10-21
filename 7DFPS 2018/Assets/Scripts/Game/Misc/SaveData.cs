@@ -86,14 +86,8 @@ public class SaveData
 
     public class WorldData
     {
-        public RoomData[] roomData = new RoomData[0];
-
-        [Serializable]
-        public class RoomData
-        {
-            public int id;
-            public Vector3 position;
-        }
+        public bool[] map = new bool[0];
+        public int mapSize = 0;
     }
 
     public class Metadata

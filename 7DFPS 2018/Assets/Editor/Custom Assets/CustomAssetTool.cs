@@ -8,8 +8,6 @@ public class CustomAssetTool : Editor
 {
     [MenuItem("Assets/Create/Player Base Object")]
     public static void CreateBaseObject() => CreateAsset<BaseObject>();
-    [MenuItem("Assets/Create/Worldgen Room")]
-    public static void CreateWorldgenRoom() => CreateAsset<Room>();
 
     public static void CreateAsset<T>() where T:ScriptableObject
     {
