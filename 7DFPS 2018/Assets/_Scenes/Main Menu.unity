@@ -4572,7 +4572,7 @@ MonoBehaviour:
   - {fileID: 1096605885}
   - {fileID: 1509234089}
   - {fileID: 1452402408}
-  gameScene: Test Scene
+  gameScene: Game Scene
 --- !u!1 &1834949551
 GameObject:
   m_ObjectHideFlags: 0

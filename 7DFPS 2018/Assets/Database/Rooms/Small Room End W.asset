@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3c5968c882f9de48937c17b2ab71d76, type: 3}
+  m_Name: Small Room End W
+  m_EditorClassIdentifier: 
+  roomPrefab: {fileID: 1396725769953032, guid: d21a17327298abf4cb4755ade4095a48, type: 2}
+  size: 0
+  weight: 1
+  doorways: 2
+  canPlaceBase: 0
+  isEndPoint: 0
