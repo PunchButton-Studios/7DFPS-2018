@@ -5,8 +5,30 @@ using UnityEngine;
 public class WorldGenerator : MonoBehaviour
 {
     public Room[] rooms;
+    private List<SaveData.WorldData.RoomData> roomData = new List<SaveData.WorldData.RoomData>();
 
     public float roomScale = 1.0f;
+
+    private void Awake()
+    {
+        GameManager.Main.saveGameEvent += OnSaveGame;
+        GameManager.Main.loadGameEvent += OnLoadGame;
+    }
+
+    private void OnLoadGame(SaveData saveData)
+    {
+        foreach(SaveData.WorldData.RoomData rd in saveData.worldData.roomData)
+        {
+            Room room = rooms[rd.id];
+            Instantiate(room.roomPrefab, rd.position, Quaternion.identity);
+            roomData.Add(rd);
+        }
+    }
+
+    private void OnSaveGame(SaveData saveData)
+    {
+        saveData.worldData.roomData = this.roomData.ToArray();
+    }
 
     public void GenerateLevel(int size)
     {
@@ -21,7 +43,7 @@ public class WorldGenerator : MonoBehaviour
 
         Queue<Vector2Int> roomQueue = new Queue<Vector2Int>();
 
-        if(startPosBaseRoom)
+        if (startPosBaseRoom)
         {
             Room[] baseRooms = rooms.Where((r) => r.canPlaceBase).ToArray();
             WeightedRandom<Room>.Item[] baseItems = new WeightedRandom<Room>.Item[baseRooms.Length];
@@ -34,10 +56,10 @@ public class WorldGenerator : MonoBehaviour
         for (int i = 0; i < items.Length; i++)
             items[i] = new WeightedRandom<Room>.Item(rooms[i], rooms[i].weight);
 
-        while(roomQueue.Count > 0)
+        while (roomQueue.Count > 0)
         {
             Vector2Int pos = roomQueue.Dequeue();
-            if(pos.magnitude < size)
+            if (pos.magnitude < size)
                 PlaceRandomRoom(pos, items, ref map, ref roomQueue);
         }
     }
@@ -49,7 +71,7 @@ public class WorldGenerator : MonoBehaviour
 
         Room selectedRoom = null;
         Vector2Int size = new Vector2Int();
-        while(selectedRoom == null)
+        while (selectedRoom == null)
         {
             selectedRoom = WeightedRandom<Room>.GetRandom(collection);
             size = GetSize(selectedRoom.size);
@@ -58,7 +80,7 @@ public class WorldGenerator : MonoBehaviour
             {
                 for (int y = 0; y < size.y; y++)
                 {
-                    if(map.ContainsKey(pos + new Vector2Int(x, y)))
+                    if (map.ContainsKey(pos + new Vector2Int(x, y)))
                     {
                         selectedRoom = null;
                         break;
@@ -70,8 +92,9 @@ public class WorldGenerator : MonoBehaviour
         }
         Vector3 worldPosition = new Vector3(pos.x * roomScale, 0, pos.y * roomScale);
         Instantiate(selectedRoom.roomPrefab, worldPosition, Quaternion.identity);
-        
-        for(int x = 0; x < size.x; x++)
+        roomData.Add(new SaveData.WorldData.RoomData() { id = System.Array.IndexOf(rooms, selectedRoom), position = worldPosition });
+
+        for (int x = 0; x < size.x; x++)
         {
             for (int y = 0; y < size.y; y++)
                 map.Add(pos + new Vector2Int(x, y), true);
@@ -79,14 +102,14 @@ public class WorldGenerator : MonoBehaviour
 
         Vector2Int center = GetCenter(selectedRoom.size);
         int offset = GetNextRoomOffset(selectedRoom.size);
-        for(int s = 0; s < 4; s++)
+        for (int s = 0; s < 4; s++)
         {
             Room.Sides side = (Room.Sides)(1 << s);
             if (selectedRoom.doorways.HasFlag(side))
             {
                 Vector2Int direction = GetDirection(side);
                 Vector2Int nextRoom = pos + center + (direction * offset);
-                if(!map.ContainsKey(nextRoom))
+                if (!map.ContainsKey(nextRoom))
                     queue.Enqueue(nextRoom);
             }
         }
@@ -94,7 +117,7 @@ public class WorldGenerator : MonoBehaviour
 
     private Vector2Int GetSize(Room.RoomSize roomSize)
     {
-        switch(roomSize)
+        switch (roomSize)
         {
             case Room.RoomSize.Big:
                 return new Vector2Int(3, 3);
@@ -105,7 +128,7 @@ public class WorldGenerator : MonoBehaviour
 
     private Vector2Int GetCenter(Room.RoomSize roomSize)
     {
-        switch(roomSize)
+        switch (roomSize)
         {
             case Room.RoomSize.Big:
                 return new Vector2Int(1, 1);
@@ -116,7 +139,7 @@ public class WorldGenerator : MonoBehaviour
 
     private int GetNextRoomOffset(Room.RoomSize roomSize)
     {
-        switch(roomSize)
+        switch (roomSize)
         {
             case Room.RoomSize.Big:
                 return 2;
@@ -127,7 +150,7 @@ public class WorldGenerator : MonoBehaviour
 
     private Vector2Int GetDirection(Room.Sides side)
     {
-        switch(side)
+        switch (side)
         {
             case Room.Sides.North:
                 return new Vector2Int(0, 1);

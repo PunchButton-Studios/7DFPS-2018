@@ -30,6 +30,7 @@ public class ActivatablePoster : ActivatableBaseObject
         {
             byte[] data = File.ReadAllBytes(filepath);
             texture2D.LoadImage(data);
+            texture2D.filterMode = FilterMode.Point;
         }
         material.mainTexture = texture2D;
         Slot.extraData = extraData;

@@ -5,6 +5,7 @@ using UnityEngine;
 public class SaveData
 {
     public Metadata metadata = new Metadata();
+    public WorldData worldData = new WorldData();
     public BaseData baseData = new BaseData();
     public PlayerData playerData = new PlayerData();
 
@@ -17,6 +18,10 @@ public class SaveData
         string baseJson = JsonUtility.ToJson(baseData, Application.isEditor);
         string baseDataPath = $@"{directory.ToString()}\base.json";
         File.WriteAllText(baseDataPath, baseJson);
+
+        string worldJson = JsonUtility.ToJson(worldData, Application.isEditor);
+        string worldDataPath = $@"{directory.ToString()}\world.json";
+        File.WriteAllText(worldDataPath, worldJson);
 
         metadata.saveName = GameManager.saveName;
         metadata.lastSave = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds();
@@ -46,6 +51,15 @@ public class SaveData
         else
             saveData.baseData = new BaseData();
 
+        string worldDataPath = $@"{directory.ToString()}\world.json";
+        if (File.Exists(worldDataPath))
+        {
+            string worldJson = File.ReadAllText(worldDataPath);
+            saveData.worldData = JsonUtility.FromJson<WorldData>(worldJson);
+        }
+        else
+            saveData.worldData = new WorldData();
+
         return saveData;
     }
 
@@ -67,6 +81,18 @@ public class SaveData
         {
             public int id;
             public string extraData;
+        }
+    }
+
+    public class WorldData
+    {
+        public RoomData[] roomData = new RoomData[0];
+
+        [Serializable]
+        public class RoomData
+        {
+            public int id;
+            public Vector3 position;
         }
     }
 
