@@ -19,7 +19,11 @@ public class PauseMenu : MonoBehaviour
         canvas.SetActive(GameManager.GamePaused);
     }
 
-    private void OnPauseChange(bool isPaused) => canvas.SetActive(isPaused);
+    private void OnPauseChange(bool isPaused)
+    {
+        if(GameManager.Main.ActiveMenu == null)
+            canvas.SetActive(isPaused);
+    }
 
     public void ResumeButton() => GameManager.GamePaused = false;
 

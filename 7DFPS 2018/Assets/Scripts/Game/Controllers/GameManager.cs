@@ -6,6 +6,7 @@ public class GameManager : MonoBehaviour
     private const string PAUSE_BUTTON_NAME = "Pause";
 
     private bool isPaused = false;
+    private ICloseableMenu activeMenu;
     private float oldTimescale = 1.0f;
 
     public static string saveName = "New Save";
@@ -37,6 +38,14 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public ICloseableMenu ActiveMenu
+    {
+        get
+        {
+            return activeMenu;
+        }
+    }
+
     private void Start()
     {
         if (startState == StartState.LoadGame)
@@ -47,10 +56,27 @@ public class GameManager : MonoBehaviour
         gameObject.AddComponent<DebugHandler>();
     }
 
+    public void CloseMenu()
+    {
+        activeMenu = null;
+        GamePaused = false;
+    }
+
+    public void OpenMenu(ICloseableMenu closeableMenu)
+    {
+        activeMenu = closeableMenu;
+        GamePaused = true;
+    }
+
     private void Update()
     {
         if (Input.GetButtonDown(PAUSE_BUTTON_NAME))
-            Pause(!isPaused);
+        {
+            if(activeMenu != null)
+                activeMenu.Close();
+            else
+                Pause(!isPaused);
+        }
     }
 
     private void OnDestroy()
@@ -91,9 +117,9 @@ public class GameManager : MonoBehaviour
             SaveData saveData = SaveData.Load(directoryInfo);
             loadGameEvent?.Invoke(saveData);
         }
-        catch
+        catch(System.Exception ex)
         {
-            Debug.LogError("Failed to load game. Is the save corrupt?");
+            Debug.LogError("Failed to load game. Is the save corrupt?\r\n" + ex.ToString());
         }
     }
 

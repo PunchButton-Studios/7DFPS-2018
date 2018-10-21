@@ -5,6 +5,7 @@ using UnityEngine;
 public class SaveData
 {
     public Metadata metadata = new Metadata();
+    public BaseData baseData = new BaseData();
     public PlayerData playerData = new PlayerData();
 
     public void Save(DirectoryInfo directory)
@@ -12,6 +13,10 @@ public class SaveData
         string playerJson = JsonUtility.ToJson(playerData, Application.isEditor);
         string playerDataPath = $@"{directory.ToString()}\player.json";
         File.WriteAllText(playerDataPath, playerJson);
+
+        string baseJson = JsonUtility.ToJson(baseData, Application.isEditor);
+        string baseDataPath = $@"{directory.ToString()}\base.json";
+        File.WriteAllText(baseDataPath, baseJson);
 
         metadata.saveName = GameManager.saveName;
         metadata.lastSave = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds();
@@ -32,6 +37,15 @@ public class SaveData
         else
             saveData.playerData = new PlayerData();
 
+        string baseDataPath = $@"{directory.ToString()}\base.json";
+        if (File.Exists(baseDataPath))
+        {
+            string baseJson = File.ReadAllText(baseDataPath);
+            saveData.baseData = JsonUtility.FromJson<BaseData>(baseJson);
+        }
+        else
+            saveData.baseData = new BaseData();
+
         return saveData;
     }
 
@@ -40,6 +54,20 @@ public class SaveData
         public float anxiety = 0.0f;
         public Vector3 position = new Vector3(0, 0, 0);
         public Quaternion rotation = Quaternion.identity;
+    }
+
+    public class BaseData
+    {
+        public int ore = 0;
+        public ObjectData[] wallObjects = new ObjectData[0];
+        public ObjectData[] groundObjects = new ObjectData[0];
+
+        [Serializable]
+        public class ObjectData
+        {
+            public int id;
+            public string extraData;
+        }
     }
 
     public class Metadata
