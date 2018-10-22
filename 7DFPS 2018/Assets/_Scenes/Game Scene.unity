@@ -142,7 +142,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   chunkHandler: {fileID: 90386274}
-  floorPrefab: {fileID: 1507742232830044, guid: ff609abd6541caa4ab9a8ed2e4b6808c,
+  floorPrefab: {fileID: 1157777765871200, guid: ff609abd6541caa4ab9a8ed2e4b6808c,
     type: 2}
   wallPrefab: {fileID: 1834433071460162, guid: 9cf4c551761acff4c926910b4b25cdbe, type: 2}
   orePrefab: {fileID: 1728397799800160, guid: 8dc531848576f3446a014579b3c518ae, type: 2}
@@ -477,6 +477,11 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 224096113454553148, guid: fda47d9282d1c8f4aa924672d40bed43,
         type: 2}
+      propertyPath: m_AnchoredPosition.x
+      value: 32.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 224096113454553148, guid: fda47d9282d1c8f4aa924672d40bed43,
+        type: 2}
       propertyPath: m_AnchorMin.y
       value: 0
       objectReference: {fileID: 0}
@@ -484,11 +489,6 @@ Prefab:
         type: 2}
       propertyPath: m_AnchorMax.y
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 224096113454553148, guid: fda47d9282d1c8f4aa924672d40bed43,
-        type: 2}
-      propertyPath: m_AnchoredPosition.x
-      value: 32.5
       objectReference: {fileID: 0}
     - target: {fileID: 224096113454553148, guid: fda47d9282d1c8f4aa924672d40bed43,
         type: 2}
