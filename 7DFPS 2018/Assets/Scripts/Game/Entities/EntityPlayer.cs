@@ -47,10 +47,17 @@ public class EntityPlayer : Entity
     private float flashlightTransition = 0.0f;
     private bool flashlightState = true;
 
+    [Header("Energy")]
+    [Range(0,1)] public float energy = 1.0f;
+    public float flashlightEnergyCost = 0.001f;
+    public float passiveEnergyCost = 0.0001f;
+
     [Header("Effects")]
     public CameraController cameraController;
-    public AudioController jointAudio, impactAudio, flashlightAudio;
+    public AudioController jointAudio, impactAudio, flashlightAudio, batteryAudio;
     public float jointVolumeIncreaseSpeed = 0.1f, jointVolumeDecreaseSpeed = 0.25f;
+
+    private bool playedBatteryAlarm = false;
 
     private float bobTimer = 0.0f;
     public float bobInterval = 0.57f;
@@ -92,6 +99,7 @@ public class EntityPlayer : Entity
         HandleInput(activatable);
         HandleAnxiety();
         HandleFlashLight();
+        DecreaseEnergy();
         PerformEffects();
         UpdateGUI(activatable);
     }
@@ -176,7 +184,7 @@ public class EntityPlayer : Entity
 
     private void ToggleFlashlight()
     {
-        if (Input.GetButtonDown(flashlightButton))
+        if (Input.GetButtonDown(flashlightButton) && energy > 0.0f)
         {
             flashlightState = !flashlightState;
             flashlightAudio.Play(flashlightState ? 0 : 1);
@@ -185,6 +193,12 @@ public class EntityPlayer : Entity
 
     private void HandleFlashLight()
     {
+        if(energy <= 0.0f && flashlightState)
+        {
+            flashlightState = false;
+            flashlightAudio.Play(1);
+        }
+
         flashlightTransition = Mathf.MoveTowards(flashlightTransition, flashlightState ? 1 : 0, flashlightToggleSpeed * Time.deltaTime);
 
         if (flashlightTransition > 0.0f)
@@ -194,6 +208,20 @@ public class EntityPlayer : Entity
         }
         else
             flashlight.enabled = false;
+    }
+
+    private void DecreaseEnergy()
+    {
+        energy -= (passiveEnergyCost + (flashlightEnergyCost * flashlightTransition)) * Time.deltaTime;
+        energy = Mathf.Clamp01(energy);
+
+        if (!playedBatteryAlarm && energy < 0.3333f)
+        {
+            batteryAudio.PlayRandom();
+            playedBatteryAlarm = true;
+        }
+        else if (playedBatteryAlarm && energy > 0.3333f)
+            playedBatteryAlarm = false;
     }
 
     private void HandleAnxiety()
