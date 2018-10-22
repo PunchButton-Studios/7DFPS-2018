@@ -80,6 +80,7 @@ public class EntityPlayer : Entity
     private void OnGameSave(SaveData saveData)
     {
         saveData.playerData.anxiety = this.anxiety;
+        saveData.playerData.energy = this.energy;
         saveData.playerData.position = transform.position;
         saveData.playerData.rotation = Quaternion.Euler(lookXAngle, transform.rotation.eulerAngles.y, 0.0f);
     }
@@ -87,6 +88,7 @@ public class EntityPlayer : Entity
     private void OnGameLoaded(SaveData saveData)
     {
         this.anxiety = saveData.playerData.anxiety;
+        this.energy = saveData.playerData.energy;
         transform.position = saveData.playerData.position;
         transform.rotation = Quaternion.Euler(0.0f, saveData.playerData.rotation.eulerAngles.y, 0.0f);
         lookXAngle = saveData.playerData.rotation.eulerAngles.x;
