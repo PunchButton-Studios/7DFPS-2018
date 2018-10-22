@@ -1265,8 +1265,8 @@ MonoBehaviour:
   flashlight: {fileID: 108327680211744820}
   flashlightToggleSpeed: 0.7
   energy: 1
-  flashlightEnergyCost: 0.001
-  passiveEnergyCost: 0.0001
+  flashlightEnergyCost: 0.005
+  passiveEnergyCost: 0.0007
   cameraController: {fileID: 114930843393507064}
   jointAudio: {fileID: 114151661370807004}
   impactAudio: {fileID: 114959264122491708}

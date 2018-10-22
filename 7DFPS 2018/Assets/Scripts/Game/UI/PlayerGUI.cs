@@ -40,5 +40,9 @@ public class PlayerGUI : MonoBehaviour
         int state = (int)Mathf.Ceil(energy * 3);
         batteryImage.color = batteryBarImage.color = batteryColors[state];
         batteryBarImage.fillAmount = (state * 0.3333f);
+        if (state == 1)
+            batteryImage.enabled = batteryBarImage.enabled = Mathf.Round(Time.unscaledTime) % 2 == 0;
+        else
+            batteryImage.enabled = batteryBarImage.enabled = true;
     }
 }

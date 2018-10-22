@@ -405,7 +405,7 @@ Prefab:
     - target: {fileID: 224096113454553148, guid: fda47d9282d1c8f4aa924672d40bed43,
         type: 2}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 32.5
       objectReference: {fileID: 0}
     - target: {fileID: 224096113454553148, guid: fda47d9282d1c8f4aa924672d40bed43,
         type: 2}
@@ -446,6 +446,26 @@ Prefab:
         type: 2}
       propertyPath: m_LocalPosition.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114241329304587476, guid: fda47d9282d1c8f4aa924672d40bed43,
+        type: 2}
+      propertyPath: batteryColors.Array.data[0].r
+      value: 0.2509804
+      objectReference: {fileID: 0}
+    - target: {fileID: 114241329304587476, guid: fda47d9282d1c8f4aa924672d40bed43,
+        type: 2}
+      propertyPath: batteryColors.Array.data[0].g
+      value: 0.2509804
+      objectReference: {fileID: 0}
+    - target: {fileID: 114241329304587476, guid: fda47d9282d1c8f4aa924672d40bed43,
+        type: 2}
+      propertyPath: batteryColors.Array.data[0].b
+      value: 0.2509804
+      objectReference: {fileID: 0}
+    - target: {fileID: 114241329304587476, guid: fda47d9282d1c8f4aa924672d40bed43,
+        type: 2}
+      propertyPath: batteryColors.Array.data[0].a
+      value: 0.5019608
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fda47d9282d1c8f4aa924672d40bed43, type: 2}
