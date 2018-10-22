@@ -9,6 +9,11 @@ public class MainMenu : MonoBehaviour
     public GameObject[] panels;
     public string gameScene;
 
+    private void Awake()
+    {
+        Config.Apply();
+    }
+
     public void SwitchActivePanel(GameObject panel)
     {
         foreach (GameObject p in panels)
