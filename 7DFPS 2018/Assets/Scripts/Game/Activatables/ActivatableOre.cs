@@ -8,6 +8,8 @@ public class ActivatableOre : Activatable, IWorldGenObject
     public GameObject tagObjectPrefab;
     private bool tagged;
 
+    public int ore = 5;
+
     public override string ActivateInfo
     {
         get
@@ -38,6 +40,7 @@ public class ActivatableOre : Activatable, IWorldGenObject
     public override void Activate(EntityPlayer player)
     {
         Tag();
+        BaseController.Main.taggedOre += ore;
     }
 
     private void Tag()
