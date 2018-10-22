@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 [RequireComponent(typeof(CharacterController))]
 public class EntityPlayer : Entity
@@ -16,13 +17,15 @@ public class EntityPlayer : Entity
     [Header("Movement")]
     public float movementSpeed = 10.0f;
     public float lookSpeed = 1.0f;
-
+    
     private float lookXAngle = 0.0f;
     public float lookMinAngle = -85.0f, lookMaxAngle = 85.0f;
 
     private float fallSpeed = 0.0f;
     public float gravity = 9.8f;
     public float maxFallSpeed = 20.0f;
+    
+    private bool isMoving = false;
 
     [Header("Action")]
     public float maxActivateRange = 2.5f;
@@ -35,6 +38,17 @@ public class EntityPlayer : Entity
     public float darknessAnxiety = 1.0f;
     public LayerMask lampMask;
     public float lightCheckRange = 16.0f;
+
+    [Header("Effects")]
+    public CameraController cameraController;
+    public AudioController jointAudio, impactAudio;
+    public float jointVolumeIncreaseSpeed = 0.1f, jointVolumeDecreaseSpeed = 0.25f;
+
+    private float bobTimer = 0.0f;
+    public float bobInterval = 0.57f;
+    public float bobInit = 0.31f;
+    public float stepDelay = 0.23f;
+    private List<float> stepTimes = new List<float>();
 
     private void Reset()
     {
@@ -69,6 +83,7 @@ public class EntityPlayer : Entity
         Activatable activatable = GetActivatable();
         HandleInput(activatable);
         HandleAnxiety();
+        PerformEffects();
         UpdateGUI(activatable);
     }
 
@@ -95,6 +110,8 @@ public class EntityPlayer : Entity
 
         Vector3 normalizedMovementDirection = (strafeMovement + forwardMovement).normalized;
         controller.Move(normalizedMovementDirection * movementSpeed * Time.deltaTime);
+
+        isMoving = normalizedMovementDirection.magnitude > 0.0f;
     }
 
     private void Look()
@@ -166,6 +183,32 @@ public class EntityPlayer : Entity
 
         if (modifier > 0.0f)
             anxiety += darknessAnxiety * modifier * Time.deltaTime;
+    }
+
+    private void PerformEffects()
+    {
+        if (isMoving)
+        {
+            bobTimer += Time.deltaTime;
+
+            if(bobTimer > bobInterval)
+            {
+                impactAudio.PlayRandom();
+                stepTimes.Add(Time.time + stepDelay);
+                bobTimer = 0.0f;
+                cameraController.Bob();
+            }
+        }
+        else
+            bobTimer = bobInit;
+
+        if(stepTimes.Count > 0 && Time.time > stepTimes[0])
+        {
+            jointAudio.PlayNext();
+            stepTimes.RemoveAt(0);
+        }
+        
+        jointAudio.Volume = Mathf.MoveTowards(jointAudio.Volume, isMoving ? 1 : 0, isMoving ? jointVolumeIncreaseSpeed : jointVolumeDecreaseSpeed);
     }
 
     private void OnDrawGizmosSelected()
