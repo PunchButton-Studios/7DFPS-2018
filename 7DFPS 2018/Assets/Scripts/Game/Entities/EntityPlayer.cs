@@ -242,7 +242,7 @@ public class EntityPlayer : Entity
             stepTimes.RemoveAt(0);
         }
         
-        jointAudio.Volume = Mathf.MoveTowards(jointAudio.Volume, isMoving ? 1 : 0, (isMoving ? jointVolumeIncreaseSpeed : jointVolumeDecreaseSpeed) * Time.deltaTime);
+        jointAudio.Volume = Mathf.MoveTowards(jointAudio.Volume, isMoving ? 1 : 0, (isMoving ? jointVolumeIncreaseSpeed : jointVolumeDecreaseSpeed));
     }
 
     private void OnDrawGizmosSelected()
