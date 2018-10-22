@@ -6,11 +6,11 @@ public class WorldGenerator : MonoBehaviour
 {
     private const int CHUNK_SIZE = 16;
 
-    private bool[] map;
+    private MapTile[] map;
     private int mapSize;
 
     public ChunkHandler chunkHandler;
-    public GameObject floorPrefab, wallPrefab;
+    public GameObject floorPrefab, wallPrefab, orePrefab;
     public Transform playerBase, player;
 
     public float scale = 1.0f;
@@ -24,6 +24,7 @@ public class WorldGenerator : MonoBehaviour
     [Range(0, 1)] public float roomChance = 0.02f;
     public int minRoomSize = 3, maxRoomSize = 8;
     [Range(0, 1)] public float roomDoorwayChance = 0.35f;
+    [Range(0, 1)] public float roomOreChance = 0.05f;
 
     private void Awake()
     {
@@ -33,14 +34,14 @@ public class WorldGenerator : MonoBehaviour
 
     private void OnGameLoaded(SaveData saveData)
     {
-        map = saveData.worldData.map;
+        map = System.Array.ConvertAll(saveData.worldData.map, (b) => (MapTile)b);
         mapSize = saveData.worldData.mapSize;
-        PlaceTiles(mapSize);
+        PlaceTiles(saveData.worldData.extraData);
     }
 
     private void OnSaveGame(SaveData saveData)
     {
-        saveData.worldData.map = map;
+        saveData.worldData.map = System.Array.ConvertAll(map, (mt) => (byte)mt);
         saveData.worldData.mapSize = mapSize;
     }
 
@@ -52,7 +53,7 @@ public class WorldGenerator : MonoBehaviour
 
     public void GenerateLevel(int size, Vector2Int startPos, bool startPosBaseRoom = false)
     {
-        map = new bool[size * size];
+        map = new MapTile[size * size];
         this.mapSize = size;
         Queue<QueuedTile> queuedTiles = new Queue<QueuedTile>();
 
@@ -68,7 +69,7 @@ public class WorldGenerator : MonoBehaviour
             else if (startPos.y < 3)
                 startPos.y += 3;
 
-            GenerateRoom(startPos, startingRoomSize, size, ref queuedTiles, true);
+            GenerateRoom(startPos, startingRoomSize, ref queuedTiles, true, true);
             Vector2Int roomCenter = new Vector2Int((int)(startingRoomSize.x * 0.5), (int)(startingRoomSize.y * 0.5));
             Vector3 playerPosition = new Vector3(startPos.x + roomCenter.x, 0, startPos.y + roomCenter.y) * scale;
             playerPosition.y = player.position.y;
@@ -98,15 +99,15 @@ public class WorldGenerator : MonoBehaviour
         while (queuedTiles.Count > 0)
         {
             QueuedTile queuedTile = queuedTiles.Dequeue();
-            GeneratePath(queuedTile.pos, queuedTile.direction, size, ref queuedTiles);
+            GeneratePath(queuedTile.pos, queuedTile.direction, ref queuedTiles);
         }
 
-        ConnectOrigins(origins, size);
+        ConnectOrigins(origins);
 
-        PlaceTiles(size);
+        PlaceTiles();
     }
 
-    private void ConnectOrigins(Vector2Int[] origins, int mapSize)
+    private void ConnectOrigins(Vector2Int[] origins)
     {
         for(int i = 0; i < origins.Length; i++)
         {
@@ -116,7 +117,7 @@ public class WorldGenerator : MonoBehaviour
                 Vector2Int pos = origins[i] + new Vector2Int((int)Mathf.Sign(difference.x) * x, 0);
                 int mapIndex = pos.x + (pos.y * mapSize);
                 if (mapIndex > 0 && mapIndex < map.Length)
-                    map[mapIndex] = true;
+                    map[mapIndex] = MapTile.EmptyTile;
             }
 
             for (int y = 0; y < Mathf.Abs(difference.y); y++)
@@ -124,18 +125,18 @@ public class WorldGenerator : MonoBehaviour
                 Vector2Int pos = origins[(i + 1) % origins.Length] + new Vector2Int(0, (int)Mathf.Sign(difference.y) * -y);
                 int mapIndex = pos.x + (pos.y * mapSize);
                 if (mapIndex > 0 && mapIndex < map.Length)
-                    map[mapIndex] = true;
+                    map[mapIndex] = MapTile.EmptyTile;
             }
         }
     }
 
-    private void GeneratePath(Vector2Int pos, Vector2Int direction, int mapSize, ref Queue<QueuedTile> queuedTiles)
+    private void GeneratePath(Vector2Int pos, Vector2Int direction, ref Queue<QueuedTile> queuedTiles)
     {
         int i = pos.x + (pos.y * mapSize);
-        if (i < 0 || i >= map.Length || map[i])
+        if (i < 0 || i >= map.Length || map[i] != 0)
             return;
 
-        map[i] = true;
+        map[i] = MapTile.EmptyTile;
 
         if(Random.value >= pathStopChance)
         {
@@ -153,14 +154,14 @@ public class WorldGenerator : MonoBehaviour
                 bool clockwiseSplit = Random.value < 0.5f;
                 Vector2Int splitDirection = RotateVector2Int(newDirection, clockwiseSplit);
                 Vector2Int splitPosition = pos + splitDirection;
-                if (!IsOutOfBounds(splitPosition, mapSize))
+                if (!IsOutOfBounds(splitPosition))
                     queuedTiles.Enqueue(new QueuedTile(splitPosition, splitDirection));
 
                 if(Random.value < pathSplitChance)
                 {
                     splitDirection = RotateVector2Int(newDirection, !clockwiseSplit);
                     splitPosition = pos + splitDirection;
-                    if (!IsOutOfBounds(splitPosition, mapSize))
+                    if (!IsOutOfBounds(splitPosition))
                         queuedTiles.Enqueue(new QueuedTile(splitPosition, splitDirection));
                 }
             }
@@ -177,23 +178,23 @@ public class WorldGenerator : MonoBehaviour
                     Random.Range(0, roomSize.y - 1)
                     );
 
-                GenerateRoom(pos - offset, roomSize, mapSize, ref queuedTiles);
+                GenerateRoom(pos - offset, roomSize, ref queuedTiles);
             }
 
             int attempts = 0;
-            while (IsOutOfBounds(nextPosition, mapSize) && attempts < 4)
+            while (IsOutOfBounds(nextPosition) && attempts < 4)
             {
                 newDirection = RotateVector2Int(newDirection, true);
                 nextPosition = pos + newDirection;
                 attempts++;
             }
 
-            if (!IsOutOfBounds(nextPosition, mapSize))
+            if (!IsOutOfBounds(nextPosition))
                 queuedTiles.Enqueue(new QueuedTile(nextPosition, newDirection));
         }
     }
 
-    private void GenerateRoom(Vector2Int pos, Vector2Int size, int mapSize, ref Queue<QueuedTile> queuedTiles, bool mustHaveDoorway = false)
+    private void GenerateRoom(Vector2Int pos, Vector2Int size, ref Queue<QueuedTile> queuedTiles, bool mustHaveDoorway = false, bool allEmpty = false)
     {
         for(int lx = 0; lx < size.x; lx++)
         {
@@ -205,7 +206,15 @@ public class WorldGenerator : MonoBehaviour
                 int i = x + (y * mapSize);
 
                 if (i < map.Length && i > 0)
-                    map[i] = true;
+                {
+                    map[i] = MapTile.EmptyTile;
+
+                    if (!allEmpty)
+                    {
+                        if (Random.value < roomOreChance)
+                            map[i] = MapTile.OreTile;
+                    }
+                }
             }
         }
 
@@ -221,7 +230,7 @@ public class WorldGenerator : MonoBehaviour
             if(Random.value < roomDoorwayChance || (!hasDoorway && mustHaveDoorway && (i == forcedDoorway || i == 3)))
             {
                 Vector2Int newPos = center + direction * new Vector2Int(halfSize.x + 1, halfSize.y + 1);
-                if (!IsOutOfBounds(newPos, mapSize))
+                if (!IsOutOfBounds(newPos))
                 {
                     queuedTiles.Enqueue(new QueuedTile(newPos, direction));
                     hasDoorway = true;
@@ -231,7 +240,7 @@ public class WorldGenerator : MonoBehaviour
         }
     }
 
-    private bool IsOutOfBounds(Vector2Int pos, int mapSize) => pos.x < 0 || pos.x >= mapSize || pos.y < 0 || pos.y >= mapSize;
+    private bool IsOutOfBounds(Vector2Int pos) => pos.x < 0 || pos.x >= mapSize || pos.y < 0 || pos.y >= mapSize;
 
     private Vector2Int RotateVector2Int(Vector2Int v2Int, bool clockwise)
     {
@@ -241,7 +250,7 @@ public class WorldGenerator : MonoBehaviour
             return new Vector2Int(-v2Int.y, v2Int.x);
     }
 
-    private void PlaceTiles(int mapSize)
+    private void PlaceTiles(byte[] saveData = null)
     {
         Dictionary<Vector2Int, Chunk> chunks = new Dictionary<Vector2Int, Chunk>();
 
@@ -250,23 +259,32 @@ public class WorldGenerator : MonoBehaviour
             for(int x = 0; x < mapSize; x++)
             {
                 Vector2Int chunk = new Vector2Int(x / CHUNK_SIZE, y / CHUNK_SIZE);
-                if (map[x + (y * mapSize)])
+                int mapIndex = x + (y * mapSize);
+                MapTile mapTile = map[mapIndex];
+                if (mapTile != MapTile.Void)
                 {
                     Vector3 worldPosition = new Vector3(x, 0, y) * scale;
                     GameObject floorObject = Instantiate(floorPrefab, worldPosition, Quaternion.identity);
                     if (!chunks.ContainsKey(chunk))
                         chunks.Add(chunk, new Chunk());
                     chunks[chunk].meshFilters.AddRange(floorObject.GetComponentsInChildren<MeshFilter>());
-                    PlaceWalls(x, y, mapSize, chunks[chunk]);
+                    PlaceWalls(x, y, chunks[chunk]);
+
+                    byte tileSaveData = 0;
+                    if (saveData != null && mapIndex < saveData.Length)
+                        tileSaveData = saveData[mapIndex];
+                    PopulateTile(mapTile, new Vector2Int(x, y), tileSaveData);
                 }
             }
         }
 
+        GameObject chunkHolder = new GameObject("Chunks");
+        chunkHolder.transform.parent = chunkHandler.transform;
         foreach (Vector2Int key in chunks.Keys)
-            CombineMeshes(chunks[key], key);
+            CombineMeshes(chunks[key], key, chunkHolder.transform);
     }
 
-    private void PlaceWalls(int x, int y, int mapSize, Chunk chunk)
+    private void PlaceWalls(int x, int y, Chunk chunk)
     {
         Vector2Int pos = new Vector2Int(x, y);
         Vector2Int direction = new Vector2Int(1, 0);
@@ -274,7 +292,7 @@ public class WorldGenerator : MonoBehaviour
         {
             Vector2Int checkPos = pos + direction;
             int mapIndex = checkPos.x + (checkPos.y * mapSize);
-            if(IsOutOfBounds(checkPos, mapSize) || !map[mapIndex])
+            if(IsOutOfBounds(checkPos) || map[mapIndex] == MapTile.Void)
             {
                 Vector3 directionV3 = new Vector3(direction.x, 0, direction.y);
                 Quaternion rotation = Quaternion.LookRotation(directionV3);
@@ -293,7 +311,34 @@ public class WorldGenerator : MonoBehaviour
         }
     }
 
-    private void CombineMeshes(Chunk chunk, Vector2Int pos)
+    private void PopulateTile(MapTile mapTile, Vector2Int pos, byte saveData)
+    {
+        Vector2 randomOffset = new Vector2(
+                Mathf.PerlinNoise(pos.x * 0.1f, pos.y * 0.1f),
+                Mathf.PerlinNoise(pos.x * -0.1f, pos.y * -0.1f)
+                ) * scale * 0.35f;
+        Quaternion randomRotation = Quaternion.Euler(0, Mathf.PerlinNoise(pos.y * 0.03f, pos.x * -0.03f) * 360, 0);
+
+        if (mapTile == MapTile.OreTile)
+        {
+            Vector3 position = new Vector3(
+                pos.x * scale - randomOffset.x,
+                0,
+                pos.y * scale - randomOffset.y
+                );
+
+            GameObject oreObject = Instantiate(orePrefab, position, randomRotation);
+            oreObject.transform.parent = chunkHandler.transform;
+            IWorldGenObject worldGenObject = oreObject.GetComponent<IWorldGenObject>();
+            if (worldGenObject != null)
+            {
+                worldGenObject.Id = (pos.x + (pos.y * mapSize));
+                worldGenObject.OnWorldLoaded(saveData);
+            }
+        }
+    }
+
+    private void CombineMeshes(Chunk chunk, Vector2Int pos, Transform chunkHolder)
     {
         CombineInstance[] combineInstances = new CombineInstance[chunk.meshFilters.Count];
         List<Material> materials = new List<Material>();
@@ -320,6 +365,7 @@ public class WorldGenerator : MonoBehaviour
         chunkMesh.mesh.CombineMeshes(combineInstances, false);
         MeshCollider collider = chunkObject.AddComponent<MeshCollider>();
         collider.sharedMesh = chunkMesh.sharedMesh;
+        chunkObject.transform.parent = chunkHolder;
 
         foreach (GameObject destroyObject in chunk.destroyObjects)
             Destroy(destroyObject);
@@ -343,5 +389,13 @@ public class WorldGenerator : MonoBehaviour
     {
         public List<MeshFilter> meshFilters = new List<MeshFilter>();
         public List<GameObject> destroyObjects = new List<GameObject>();
+    }
+
+    public enum MapTile : byte
+    {
+        Void,
+        EmptyTile,
+        BaseReserved,
+        OreTile,
     }
 }

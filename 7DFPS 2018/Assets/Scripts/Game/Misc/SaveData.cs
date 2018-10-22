@@ -89,8 +89,21 @@ public class SaveData
 
     public class WorldData
     {
-        public bool[] map = new bool[0];
+        public byte[] map = new byte[0];
+        public byte[] extraData = new byte[0];
         public int mapSize = 0;
+
+        public void SaveExtraData(IWorldGenObject worldGenObject, byte data)
+        {
+            int id = worldGenObject.Id;
+            if (id >= extraData.Length)
+            {
+                byte[] newEDArray = new byte[id + 1];
+                Array.Copy(extraData, newEDArray, extraData.Length);
+                extraData = newEDArray;
+            }
+            extraData[id] = data;
+        }
     }
 
     public class Metadata
