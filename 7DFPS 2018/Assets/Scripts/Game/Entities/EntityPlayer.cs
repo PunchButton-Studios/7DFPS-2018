@@ -13,6 +13,7 @@ public class EntityPlayer : Entity
     public string horizontalLookAxis = "Mouse X";
     public string verticalLookAxis = "Mouse Y";
     public string actionButton = "Action";
+    public string flashlightButton = "Flashlight";
 
     [Header("Movement")]
     public float movementSpeed = 10.0f;
@@ -36,12 +37,19 @@ public class EntityPlayer : Entity
     public float anxiety = 0.0f;
     public float maxAnxiety = 128.0f;
     public float darknessAnxiety = 1.0f;
+    public float flashlightAnxietyModifier = 0.3f;
     public LayerMask lampMask;
     public float lightCheckRange = 16.0f;
 
+    [Header("Flashlight")]
+    public Light flashlight;
+    public float flashlightToggleSpeed = 0.3f;
+    private float flashlightTransition = 0.0f;
+    private bool flashlightState = true;
+
     [Header("Effects")]
     public CameraController cameraController;
-    public AudioController jointAudio, impactAudio;
+    public AudioController jointAudio, impactAudio, flashlightAudio;
     public float jointVolumeIncreaseSpeed = 0.1f, jointVolumeDecreaseSpeed = 0.25f;
 
     private float bobTimer = 0.0f;
@@ -83,6 +91,7 @@ public class EntityPlayer : Entity
         Activatable activatable = GetActivatable();
         HandleInput(activatable);
         HandleAnxiety();
+        HandleFlashLight();
         PerformEffects();
         UpdateGUI(activatable);
     }
@@ -95,6 +104,7 @@ public class EntityPlayer : Entity
         Look();
         Fall();
         Action(activatable);
+        ToggleFlashlight();
     }
 
     private void UpdateGUI(Activatable activatable) => gui.UpdateGUI(activatable, this);
@@ -164,6 +174,28 @@ public class EntityPlayer : Entity
     }
     #endregion
 
+    private void ToggleFlashlight()
+    {
+        if (Input.GetButtonDown(flashlightButton))
+        {
+            flashlightState = !flashlightState;
+            flashlightAudio.Play(flashlightState ? 0 : 1);
+        }
+    }
+
+    private void HandleFlashLight()
+    {
+        flashlightTransition = Mathf.MoveTowards(flashlightTransition, flashlightState ? 1 : 0, flashlightToggleSpeed * Time.deltaTime);
+
+        if (flashlightTransition > 0.0f)
+        {
+            flashlight.enabled = true;
+            flashlight.intensity = flashlightTransition;
+        }
+        else
+            flashlight.enabled = false;
+    }
+
     private void HandleAnxiety()
     {
         float modifier = 1.0f;
@@ -180,6 +212,8 @@ public class EntityPlayer : Entity
                 }
             }
         }
+
+        modifier *= (flashlightTransition * flashlightAnxietyModifier);
 
         if (modifier > 0.0f)
             anxiety += darknessAnxiety * modifier * Time.deltaTime;
@@ -208,7 +242,7 @@ public class EntityPlayer : Entity
             stepTimes.RemoveAt(0);
         }
         
-        jointAudio.Volume = Mathf.MoveTowards(jointAudio.Volume, isMoving ? 1 : 0, isMoving ? jointVolumeIncreaseSpeed : jointVolumeDecreaseSpeed);
+        jointAudio.Volume = Mathf.MoveTowards(jointAudio.Volume, isMoving ? 1 : 0, (isMoving ? jointVolumeIncreaseSpeed : jointVolumeDecreaseSpeed) * Time.deltaTime);
     }
 
     private void OnDrawGizmosSelected()
