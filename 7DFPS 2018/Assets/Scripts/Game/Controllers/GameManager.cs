@@ -51,7 +51,7 @@ public class GameManager : MonoBehaviour
         if (startState == StartState.LoadGame)
             LoadGame();
         else if (startState == StartState.NewGame)
-            FindObjectOfType<WorldGenerator>().GenerateLevel(100, new Vector2Int(2,2), true);
+            FindObjectOfType<WorldGenerator>().GenerateLevel(100, new Vector2Int(3,3), true);
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;

@@ -122,8 +122,9 @@ GameObject:
   m_Component:
   - component: {fileID: 90386273}
   - component: {fileID: 90386272}
+  - component: {fileID: 90386274}
   m_Layer: 0
-  m_Name: WorldGenerator
+  m_Name: World
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -140,13 +141,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 96d0cf1a4bec8504fa58ce4db5d1cbf5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  chunkHandler: {fileID: 90386274}
   floorPrefab: {fileID: 1507742232830044, guid: ff609abd6541caa4ab9a8ed2e4b6808c,
     type: 2}
-  wallPrefab: {fileID: 0}
-  scale: 10
-  pathStopChance: 0.0025
+  wallPrefab: {fileID: 1834433071460162, guid: 9cf4c551761acff4c926910b4b25cdbe, type: 2}
+  playerBase: {fileID: 783478683}
+  player: {fileID: 139988725}
+  scale: 5
+  startingRoomSize: {x: 3, y: 3}
+  minOrigins: 3
+  maxOrigins: 5
+  pathStopChance: 0.002
   pathBendChance: 0.03
-  pathSplitChance: 0.05
+  pathSplitChance: 0.07
+  roomChance: 0.02
+  minRoomSize: 3
+  maxRoomSize: 8
+  roomDoorwayChance: 0.6
 --- !u!4 &90386273
 Transform:
   m_ObjectHideFlags: 0
@@ -160,6 +171,25 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &90386274
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 90386271}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 031df7f07265dfb41bc0bd225e6ba097, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 139988725}
+  maxDistance: 3
+  scale: 1
+--- !u!4 &139988725 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4642867996469832, guid: fda47d9282d1c8f4aa924672d40bed43,
+    type: 2}
+  m_PrefabInternal: {fileID: 165859819}
 --- !u!1 &149153705
 GameObject:
   m_ObjectHideFlags: 0
@@ -307,7 +337,7 @@ Prefab:
     - target: {fileID: 224096113454553148, guid: fda47d9282d1c8f4aa924672d40bed43,
         type: 2}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 32.5
       objectReference: {fileID: 0}
     - target: {fileID: 224352808202163274, guid: fda47d9282d1c8f4aa924672d40bed43,
         type: 2}
