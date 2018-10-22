@@ -405,11 +405,6 @@ Prefab:
       propertyPath: m_AnchoredPosition.x
       value: 32.5
       objectReference: {fileID: 0}
-    - target: {fileID: 224352808202163274, guid: fda47d9282d1c8f4aa924672d40bed43,
-        type: 2}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 224096113454553148, guid: fda47d9282d1c8f4aa924672d40bed43,
         type: 2}
       propertyPath: m_AnchorMin.y
