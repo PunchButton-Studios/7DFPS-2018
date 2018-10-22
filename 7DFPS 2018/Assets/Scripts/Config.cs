@@ -4,6 +4,7 @@ using UnityEngine;
 public class Config
 {
     public float volume = 0.6f;
+    public bool vsync = false;
 
     private static Config main;
     public static Config Main
@@ -19,6 +20,7 @@ public class Config
     public static void Apply()
     {
         AudioListener.volume = Main.volume;
+        QualitySettings.vSyncCount = Main.vsync ? 1 : 0;
     }
 
     public static void Load()
