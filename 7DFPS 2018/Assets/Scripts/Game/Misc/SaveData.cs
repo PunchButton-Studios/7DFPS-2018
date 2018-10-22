@@ -72,6 +72,8 @@ public class SaveData
 
     public class BaseData
     {
+        public Vector3 position = new Vector3(0, 0, 0);
+
         public int ore = 0;
         public ObjectData[] wallObjects = new ObjectData[0];
         public ObjectData[] groundObjects = new ObjectData[0];

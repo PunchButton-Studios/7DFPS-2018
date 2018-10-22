@@ -34,7 +34,8 @@ public class WorldGenerator : MonoBehaviour
     private void OnGameLoaded(SaveData saveData)
     {
         map = saveData.worldData.map;
-        PlaceTiles(saveData.worldData.mapSize);
+        mapSize = saveData.worldData.mapSize;
+        PlaceTiles(mapSize);
     }
 
     private void OnSaveGame(SaveData saveData)

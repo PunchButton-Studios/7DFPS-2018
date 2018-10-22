@@ -17,11 +17,13 @@ public class BaseController : MonoBehaviour
 
     private void OnSaveGame(SaveData saveData)
     {
+        saveData.baseData.position = transform.position;
         saveData.baseData.ore = this.ore;
     }
 
     private void OnGameLoaded(SaveData saveData)
     {
+        transform.position = saveData.baseData.position;
         this.ore = saveData.baseData.ore;
     }
 }
