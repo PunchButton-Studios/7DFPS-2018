@@ -1,0 +1,16 @@
+Er zitten 2 audiosources op de speler voor deze walk sounds:
+
+1: IMPACT - zit bijna op de grond, daar worden de footstep_mech geluiden afgespeeld
+2: JOINT - zit waar je de benen van de speler zou verwachten, daar komen de walk_mech geluiden vandaan
+
+Terwijl je de loopknop indrukt:
+
+-JOINT.Volume = lerp naar max volume in 0.1 seconden
+-Iedere 0.57 seconden (decimalen van 0-99) moet er een random Footstep_Mech geluid gespeeld worden
+-Iedere 0.57 moet er een kleine view bob naar beneden zijn
+-Iedere 0.23 seconden na het afspelen van een Footstep_Mech geluid, moet afwisselend Walk_Mech_1 of
+Walk_Mech 2 afgespeeld worden (1...2...1...2... etc.)
+
+Terwijl er geen loop knoppen ingedrukt worden
+
+-JOINT.volume = lerp naar 0 volume in 0.25 seconden
