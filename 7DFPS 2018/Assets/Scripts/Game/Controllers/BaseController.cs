@@ -9,6 +9,8 @@ public class BaseController : MonoBehaviour
     public int ore;
 
     public CollectingState collectingState = CollectingState.Idle;
+    public float collectingTime = 0.2f;
+    private float collectingTimer = 0.0f;
     public static BaseController Main { get; private set; }
 
     private void Awake()
@@ -44,30 +46,37 @@ public class BaseController : MonoBehaviour
 
     private void CollectOres()
     {
-        switch(collectingState)
+        collectingTimer += Time.deltaTime;
+
+        if (collectingTimer > collectingTime)
         {
-            case CollectingState.CollectingTaggedOres:
-                {
-                    if (taggedOre > 0)
+            switch (collectingState)
+            {
+                case CollectingState.CollectingTaggedOres:
                     {
-                        taggedOre--;
-                        retrievingOre++;
+                        if (taggedOre > 0)
+                        {
+                            taggedOre--;
+                            retrievingOre++;
+                        }
+                        else
+                            collectingState = CollectingState.AddingToInventory;
                     }
-                    else
-                        collectingState = CollectingState.AddingToInventory;
-                }
-                break;
-            case CollectingState.AddingToInventory:
-                {
-                    if (retrievingOre > 0)
+                    break;
+                case CollectingState.AddingToInventory:
                     {
-                        retrievingOre--;
-                        ore++;
+                        if (retrievingOre > 0)
+                        {
+                            retrievingOre--;
+                            ore++;
+                        }
+                        else
+                            collectingState = CollectingState.Idle;
                     }
-                    else
-                        collectingState = CollectingState.Idle;
-                }
-                break;
+                    break;
+            }
+
+            collectingTimer = 0.0f;
         }
     }
 
