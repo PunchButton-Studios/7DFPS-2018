@@ -111,6 +111,12 @@ public class EntityPlayer : Entity
         lookXAngle = saveData.playerData.rotation.eulerAngles.x;
     }
 
+    protected override void Start()
+    {
+        base.Start();
+        bobTimer = bobInit;
+    }
+
     protected override void Update()
     {
         base.Update();
@@ -165,11 +171,12 @@ public class EntityPlayer : Entity
         transform.Rotate(new Vector3(0, mouseX * lookSpeed, 0)); //Rotate Left/Right
 
         //Up/Down rotation
+        float oldLookXAngle = lookXAngle;
         lookXAngle -= mouseY * lookSpeed;
         lookXAngle = Mathf.Clamp(lookXAngle, lookMinAngle, lookMaxAngle);
         head.transform.localRotation = Quaternion.Euler(lookXAngle, 0, 0);
 
-        rotationChange = Mathf.Abs(mouseX) + Mathf.Abs(mouseY);
+        rotationChange = Mathf.Abs(mouseX) + Mathf.Abs(lookXAngle - oldLookXAngle);
     }
 
     private void Fall()
@@ -318,8 +325,6 @@ public class EntityPlayer : Entity
                 cameraController.Bob();
             }
         }
-        else
-            bobTimer = bobInit;
 
         if(stepTimes.Count > 0 && Time.time > stepTimes[0])
         {

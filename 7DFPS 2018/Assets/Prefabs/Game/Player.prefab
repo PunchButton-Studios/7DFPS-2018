@@ -2297,15 +2297,15 @@ MonoBehaviour:
   maxActivateRange: 2.5
   activationMask:
     serializedVersion: 2
-    m_Bits: 823
+    m_Bits: 2871
   gui: {fileID: 114241329304587476}
   anxiety: 0
   maxAnxiety: 128
   darknessAnxiety: 1
   flashlightAnxietyModifier: 0.3
-  lampMask:
+  anxietyMask:
     serializedVersion: 2
-    m_Bits: 512
+    m_Bits: 2560
   lightCheckRange: 16
   flashlight: {fileID: 108327680211744820}
   flashlightToggleSpeed: 0.7
