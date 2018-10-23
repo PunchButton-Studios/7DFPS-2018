@@ -314,10 +314,10 @@ public class WorldGenerator : MonoBehaviour
     private void PopulateTile(MapTile mapTile, Vector2Int pos, byte saveData)
     {
         Vector2 randomOffset = new Vector2(
-                Mathf.PerlinNoise(pos.x * 0.1f, pos.y * 0.1f),
-                Mathf.PerlinNoise(pos.x * -0.1f, pos.y * -0.1f)
+                Mathf.PerlinNoise(pos.x * 53.791f, pos.y * 29.314f) * Mathf.PerlinNoise((pos.y + 23.4f) * 11.172f, (pos.x + 62.6f) * 86.148f),
+                Mathf.PerlinNoise(pos.x * -21.218f, pos.y * -58.057f) * Mathf.PerlinNoise((pos.y - 23.4f) * 62.127f, (pos.x - 62.6f) * 10.150f)
                 ) * scale * 0.35f;
-        Quaternion randomRotation = Quaternion.Euler(0, Mathf.PerlinNoise(pos.y * 0.03f, pos.x * -0.03f) * 360, 0);
+        Quaternion randomRotation = Quaternion.Euler(0, (Mathf.PerlinNoise(pos.y * 83.163f, pos.x * -65.273f) * Mathf.PerlinNoise(pos.y * 3.12f, pos.x * 7.31f)) * 360, 0);
 
         if (mapTile == MapTile.OreTile)
         {
