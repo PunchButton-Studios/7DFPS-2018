@@ -291,6 +291,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ea2991fedbcf8c4ead347a83c564b61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  activationTime: 0.01
   terminalCanvas: {fileID: 2067324636}
   groundSlots:
   - {fileID: 823425101}
@@ -1158,6 +1159,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a8650d153eab734f9b39f020b0dfc09, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  activationTime: 0.01
 --- !u!1 &1830713480
 GameObject:
   m_ObjectHideFlags: 0

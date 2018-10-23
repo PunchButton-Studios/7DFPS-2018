@@ -27,6 +27,7 @@ public class EntityPlayer : Entity
 
     [Header("Action")]
     public float maxActivateRange = 2.5f;
+    public float activationTimer = 0.0f;
     public LayerMask activationMask;
     public PlayerGUI gui;
 
@@ -212,8 +213,17 @@ public class EntityPlayer : Entity
 
     private void Action(Activatable activatable)
     {
-        if (InputHandler.GetButton(InputHandler.Input.Action))
-            activatable?.Activate(this);
+        if (InputHandler.GetButton(InputHandler.Input.Action) && activatable != null)
+        {
+            activationTimer += Time.deltaTime;
+            if (activationTimer > activatable.ActivationTime)
+            {
+                activatable.Activate(this);
+                activationTimer = 0.0f;
+            }
+        }
+        else
+            activationTimer = 0.0f;
     }
     #endregion
 

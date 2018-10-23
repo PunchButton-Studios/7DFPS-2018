@@ -137,6 +137,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e75fa924c086b24aa8726e0adc776df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  activationTime: 1
   activateText: Tag Cobalt Ore
   tagObjectPrefab: {fileID: 1517636581301460, guid: bd9205ed90da7704eb055a255056ed35,
     type: 2}

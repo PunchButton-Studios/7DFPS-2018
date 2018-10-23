@@ -9,6 +9,7 @@ public class PlayerGUI : MonoBehaviour
     public GameObject targetTextObject;
     public Text targetText;
     public Image anxietyOverlay;
+    public Image activationProgressCircle;
 
     public Image batteryImage, batteryBarImage;
     public Color[] batteryColors = new Color[4] { Color.gray, Color.red, Color.yellow, Color.green };
@@ -31,7 +32,13 @@ public class PlayerGUI : MonoBehaviour
         {
             targetText.text = targetActivatable.ActivateInfo;
             LayoutRebuilder.ForceRebuildLayoutImmediate(targetText.rectTransform);
+
+            float activationProgress = player.activationTimer / targetActivatable.ActivationTime;
+            activationProgressCircle.fillAmount = activationProgress;
+            activationProgressCircle.color = progressCircleColorGradient.Evaluate(activationProgress);
         }
+        else
+            activationProgressCircle.fillAmount = 0.0f;
 
         UpdateHomeCallInfo(canCallHome, player);
         UpdateAnxiety(player.anxiety, player.maxAnxiety);
