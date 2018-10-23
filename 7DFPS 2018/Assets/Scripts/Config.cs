@@ -49,5 +49,6 @@ public class Config
         public KeyCode action = KeyCode.Mouse0;
         public KeyCode flashlight = KeyCode.F;
         public KeyCode pause = KeyCode.Escape;
+        public KeyCode callHome = KeyCode.H;
     }
 }

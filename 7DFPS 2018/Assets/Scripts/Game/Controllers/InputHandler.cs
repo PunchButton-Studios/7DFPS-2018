@@ -30,6 +30,8 @@ public static class InputHandler
                 return new KeyCode[] { keybinds.flashlight };
             case Input.Pause:
                 return new KeyCode[] { keybinds.pause };
+            case Input.CallHome:
+                return new KeyCode[] { keybinds.callHome };
             default:
                 return null;
         }
@@ -42,5 +44,6 @@ public static class InputHandler
         Action,
         Flashlight,
         Pause,
+        CallHome,
     }
 }

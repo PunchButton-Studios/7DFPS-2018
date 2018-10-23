@@ -5,7 +5,7 @@ using UnityEngine;
 public class EntityPlayer : Entity
 {
     public CharacterController controller;
-    public Transform head;
+    public Transform head, playerBase;
 
     [Header("Input")]
     public string horizontalLookAxis = "Mouse X";
@@ -49,6 +49,14 @@ public class EntityPlayer : Entity
     public float flashlightEnergyCost = 0.001f;
     public float passiveEnergyCost = 0.0001f;
 
+    [Header("Home Calling")]
+    public Vector3 homeCallFreeSpaceRange;
+    public LayerMask homeCallCollisionMask;
+    public float homeCallTimer = 0.0f;
+    public float homeCallTimerIdleDecrease = 2.0f;
+    public AnimationCurve homeCallTimePerDistance;
+    public float homeCallTimeMultiplier = 0.25f;
+
     [Header("Effects")]
     public CameraController cameraController;
     public AudioController jointAudio, impactAudio, flashlightAudio, batteryAudio;
@@ -65,6 +73,14 @@ public class EntityPlayer : Entity
     public float bobInit = 0.31f;
     public float stepDelay = 0.23f;
     private List<float> stepTimes = new List<float>();
+
+    public float HomeCallTime
+    {
+        get
+        {
+            return homeCallTimePerDistance.Evaluate(Vector3.Distance(transform.position, playerBase.position)) * homeCallTimeMultiplier;
+        }
+    }
 
     private void Reset()
     {
@@ -99,26 +115,31 @@ public class EntityPlayer : Entity
     {
         base.Update();
         Activatable activatable = GetActivatable();
-        HandleInput(activatable);
+        bool canCallHome = CanCallHome();
+        HandleInput(activatable, canCallHome);
         HandleAnxiety();
         HandleFlashLight();
         DecreaseEnergy();
         PerformEffects();
-        UpdateGUI(activatable);
+        UpdateGUI(activatable, canCallHome);
     }
 
-    private void HandleInput(Activatable activatable)
+    private void HandleInput(Activatable activatable, bool canCallHome)
     {
         if (GameManager.GamePaused)
             return;
-        Move();
         Look();
         Fall();
-        Action(activatable);
-        ToggleFlashlight();
+
+        if (!CallHome(canCallHome))
+        {
+            Move();
+            Action(activatable);
+            ToggleFlashlight();
+        }
     }
 
-    private void UpdateGUI(Activatable activatable) => gui.UpdateGUI(activatable, this);
+    private void UpdateGUI(Activatable activatable, bool canCallHome) => gui.UpdateGUI(activatable, canCallHome, this);
 
     #region Movement
     private void Move()
@@ -186,6 +207,31 @@ public class EntityPlayer : Entity
             activatable?.Activate(this);
     }
     #endregion
+
+    private bool CanCallHome() => !Physics.CheckBox(transform.position, homeCallFreeSpaceRange, Quaternion.identity, homeCallCollisionMask);
+
+    private bool CallHome(bool canCallHome)
+    {
+        if (InputHandler.GetButton(InputHandler.Input.CallHome) && canCallHome)
+        {
+            homeCallTimer += Time.deltaTime;
+
+            if(homeCallTimer > HomeCallTime)
+            {
+                playerBase.transform.position = new Vector3(transform.position.x, 0.01f, transform.position.z);
+                homeCallTimer = 0.0f;
+            }
+
+            return true;
+        }
+        else
+        {
+            homeCallTimer -= homeCallTimerIdleDecrease * Time.deltaTime;
+            if (homeCallTimer < 0.0f)
+                homeCallTimer = 0.0f;
+            return false;
+        }
+    }
 
     private void ToggleFlashlight()
     {
@@ -287,5 +333,8 @@ public class EntityPlayer : Entity
     {
         Gizmos.color = Color.magenta;
         Gizmos.DrawRay(head.position, head.forward * maxActivateRange); //Activation range
+
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireCube(transform.position, homeCallFreeSpaceRange * 2);
     }
 }

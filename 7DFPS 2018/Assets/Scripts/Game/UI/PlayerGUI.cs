@@ -13,11 +13,16 @@ public class PlayerGUI : MonoBehaviour
     public Image batteryImage, batteryBarImage;
     public Color[] batteryColors = new Color[4] { Color.gray, Color.red, Color.yellow, Color.green };
 
+    public Image callHomeImage, callHomeProgressImage;
+    public Color[] callHomeColors = new Color[2] { Color.red, Color.green };
+
+    public Gradient progressCircleColorGradient;
+
     public Text oreResourceCountText;
 
-    public GameObject activatePrompt;
+    public GameObject activatePrompt, callHomePrompt;
 
-    public void UpdateGUI(Activatable targetActivatable, EntityPlayer player)
+    public void UpdateGUI(Activatable targetActivatable, bool canCallHome, EntityPlayer player)
     {
         reticle.active = targetActivatable != null;
         targetTextObject.SetActive(targetActivatable != null);
@@ -28,10 +33,11 @@ public class PlayerGUI : MonoBehaviour
             LayoutRebuilder.ForceRebuildLayoutImmediate(targetText.rectTransform);
         }
 
+        UpdateHomeCallInfo(canCallHome, player);
         UpdateAnxiety(player.anxiety, player.maxAnxiety);
         UpdateBattery(player.energy);
         UpdateResourceList();
-        UpdatePrompts(targetActivatable != null);
+        UpdatePrompts(targetActivatable != null, canCallHome);
     }
 
     private void UpdateAnxiety(float anxiety, float maxAnxiety)
@@ -52,13 +58,22 @@ public class PlayerGUI : MonoBehaviour
             batteryImage.enabled = batteryBarImage.enabled = true;
     }
 
+    private void UpdateHomeCallInfo(bool canCallHome, EntityPlayer player)
+    {
+        callHomeImage.color = callHomeColors[canCallHome ? 1 : 0];
+        float progress = player.homeCallTimer / player.HomeCallTime;
+        callHomeProgressImage.fillAmount = progress;
+        callHomeProgressImage.color = progressCircleColorGradient.Evaluate(progress);
+    }
+
     private void UpdateResourceList()
     {
         oreResourceCountText.text = BaseController.Main.ore.ToString() + (BaseController.Main.retrievingOre > 0 ? $" +{BaseController.Main.retrievingOre.ToString()}" : string.Empty);
     }
 
-    private void UpdatePrompts(bool hasTargetActivatable)
+    private void UpdatePrompts(bool hasTargetActivatable, bool canCallHome)
     {
         activatePrompt.SetActive(hasTargetActivatable);
+        callHomePrompt.SetActive(canCallHome);
     }
 }
