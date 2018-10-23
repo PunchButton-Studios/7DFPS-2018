@@ -276,6 +276,9 @@ public class EntityPlayer : Entity
         }
         
         jointAudio.Volume = Mathf.MoveTowards(jointAudio.Volume, isMoving ? 1 : 0, (isMoving ? jointVolumeIncreaseSpeed : jointVolumeDecreaseSpeed));
+
+        if (GameManager.GamePaused)
+            rotationChange = 0.0f;
         rotateAudio.volume = Mathf.Clamp(Mathf.Lerp(rotateAudio.volume, rotationChange / rotateVolumeEffect, rotateVolumeLerpSpeed), 0, rotateMaxVolume);
         rotateAudio.pitch = Mathf.Clamp(Mathf.Lerp(rotateAudio.pitch, rotationChange / rotatePitchEffect + rotateMinPitch, rotatePitchLerpSpeed), rotateMinPitch, rotateMaxPitch);
     }

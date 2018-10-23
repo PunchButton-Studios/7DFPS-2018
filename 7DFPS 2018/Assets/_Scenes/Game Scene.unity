@@ -600,11 +600,6 @@ Prefab:
       propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 224352808202163274, guid: fda47d9282d1c8f4aa924672d40bed43,
-        type: 2}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fda47d9282d1c8f4aa924672d40bed43, type: 2}
   m_IsPrefabAsset: 0
