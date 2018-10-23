@@ -23,7 +23,7 @@ GameObject:
   - component: {fileID: 23267092958984344}
   - component: {fileID: 64292984395545454}
   - component: {fileID: 114565184613996540}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: PosterPlaceholder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -110,3 +110,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52eaa07b5f1afd24d863c1f84b699387, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  anxietyDecreaseAmount: 0.3

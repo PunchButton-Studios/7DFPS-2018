@@ -1,16 +1,26 @@
 ﻿using System.IO;
 using UnityEngine;
 
-public class ActivatablePoster : ActivatableBaseObject
+public class ActivatablePoster : ActivatableBaseObject, IRelaxationObject
 {
     private string filepath = string.Empty;
     private Material material;
+
+    public float anxietyDecreaseAmount = 0.3f;
 
     public override string ActivateInfo
     {
         get
         {
             return "Change Image";
+        }
+    }
+
+    public float AnxietyDecreaseAmount
+    {
+        get
+        {
+            return anxietyDecreaseAmount;
         }
     }
 

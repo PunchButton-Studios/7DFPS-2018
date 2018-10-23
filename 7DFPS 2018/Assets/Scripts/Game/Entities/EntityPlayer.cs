@@ -35,7 +35,7 @@ public class EntityPlayer : Entity
     public float maxAnxiety = 128.0f;
     public float darknessAnxiety = 1.0f;
     public float flashlightAnxietyModifier = 0.3f;
-    public LayerMask lampMask;
+    public LayerMask anxietyMask;
     public float lightCheckRange = 16.0f;
 
     [Header("Flashlight")]
@@ -278,7 +278,7 @@ public class EntityPlayer : Entity
     private void HandleAnxiety()
     {
         float modifier = 1.0f;
-        Collider[] colliders = Physics.OverlapSphere(transform.position, lightCheckRange, lampMask);
+        Collider[] colliders = Physics.OverlapSphere(transform.position, lightCheckRange, anxietyMask);
         if(colliders.Length > 0)
         {
             foreach(Collider c in colliders)
@@ -289,6 +289,10 @@ public class EntityPlayer : Entity
                     if(Vector3.Distance(transform.position, c.transform.position) < lightSource.Range)
                         modifier -= lightSource.Power;
                 }
+
+                IRelaxationObject relaxationObject = c.GetComponent<IRelaxationObject>();
+                if(relaxationObject != null)
+                    anxiety -= relaxationObject.AnxietyDecreaseAmount * Time.deltaTime;
             }
         }
 
@@ -296,6 +300,8 @@ public class EntityPlayer : Entity
 
         if (modifier > 0.0f)
             anxiety += darknessAnxiety * modifier * Time.deltaTime;
+
+        anxiety = Mathf.Clamp(anxiety, 0, maxAnxiety);
     }
 
     private void PerformEffects()
