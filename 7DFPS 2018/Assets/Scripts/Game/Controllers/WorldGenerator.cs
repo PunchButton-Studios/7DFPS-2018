@@ -47,7 +47,7 @@ public class WorldGenerator : MonoBehaviour
 
     public void GenerateLevel(int size)
     {
-        Vector2Int startPos = new Vector2Int(Random.Range(0, size - 1), Random.Range(0, size - 1));
+        Vector2Int startPos = new Vector2Int(Random.Range(0, size), Random.Range(0, size));
         GenerateLevel(size, startPos, true);
     }
 
@@ -84,7 +84,7 @@ public class WorldGenerator : MonoBehaviour
             if (i == 0)
                 origins[i] = startPos;
             else
-                origins[i] = new Vector2Int(Random.Range(0, mapSize - 1), Random.Range(0, mapSize - 1));
+                origins[i] = new Vector2Int(Random.Range(0, mapSize), Random.Range(0, mapSize));
 
             Vector2Int direction = new Vector2Int(0, 0);
 
@@ -174,8 +174,8 @@ public class WorldGenerator : MonoBehaviour
                     );
 
                 Vector2Int offset = new Vector2Int(
-                    Random.Range(0, roomSize.x - 1),
-                    Random.Range(0, roomSize.y - 1)
+                    Random.Range(0, roomSize.x),
+                    Random.Range(0, roomSize.y)
                     );
 
                 GenerateRoom(pos - offset, roomSize, ref queuedTiles);

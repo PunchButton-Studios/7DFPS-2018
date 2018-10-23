@@ -7,7 +7,7 @@ public static class WeightedRandom<T>
     public static T GetRandom(IEnumerable<Item> collection)
     {
         int totalWeight = GetTotalWeight(collection);
-        int randomValue = Random.Range(0, totalWeight - 1);
+        int randomValue = Random.Range(0, totalWeight);
         return GetRandom(collection, randomValue);
     }
 

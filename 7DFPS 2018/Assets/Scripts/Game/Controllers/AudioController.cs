@@ -32,7 +32,7 @@ public class AudioController : MonoBehaviour
         lastClipId = clipId;
     }
 
-    public void PlayRandom() => Play(Random.Range(0, clips.Length - 1));
+    public void PlayRandom() => Play(Random.Range(0, clips.Length));
 
     public void PlayNext()
     {
