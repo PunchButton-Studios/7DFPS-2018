@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class WorldGenerator : MonoBehaviour
 {
-    private const int CHUNK_SIZE = 16;
+    private const int CHUNK_SIZE = 8;
 
     private MapTile[] map;
     private int mapSize;
@@ -372,6 +372,8 @@ public class WorldGenerator : MonoBehaviour
 
         chunkHandler.scale = CHUNK_SIZE * scale;
         chunkHandler.chunkRenderers.Add(pos, chunkRenderer);
+
+        StaticBatchingUtility.Combine(chunkHandler.gameObject);
     }
 
     private struct QueuedTile

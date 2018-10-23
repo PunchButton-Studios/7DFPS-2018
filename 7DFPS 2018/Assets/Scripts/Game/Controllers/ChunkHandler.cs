@@ -15,8 +15,8 @@ public class ChunkHandler : MonoBehaviour
     {
         foreach(Vector2Int v2 in chunkRenderers.Keys)
         {
-            Vector3 worldVector = new Vector3(v2.x, 0, v2.y);
-            chunkRenderers[v2].enabled = Vector3.Distance(player.position / scale, worldVector) <= maxDistance;
+            Vector3 worldVector = new Vector3(v2.x * scale + scale * 0.5f, 0, v2.y * scale + scale * 0.5f);
+            chunkRenderers[v2].enabled = Vector3.Distance(player.position, worldVector) <= maxDistance;
         }
 
         yield return new WaitForEndOfFrame();
