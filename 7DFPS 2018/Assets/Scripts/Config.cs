@@ -6,6 +6,8 @@ public class Config
     public float volume = 0.6f;
     public bool vsync = false;
 
+    public Keybinds keybinds;
+
     private static Config main;
     public static Config Main
     {
@@ -36,5 +38,15 @@ public class Config
     {
         string path = $@"{Application.persistentDataPath}\config.json";
         File.WriteAllText(path, JsonUtility.ToJson(Main));
+    }
+
+    [System.Serializable]
+    public class Keybinds
+    {
+        public KeyCode movementForward = KeyCode.W, movementBackward = KeyCode.S;
+        public KeyCode movementLeft = KeyCode.A, movementRight = KeyCode.D;
+        public KeyCode action = KeyCode.Mouse0;
+        public KeyCode flashlight = KeyCode.F;
+        public KeyCode pause = KeyCode.Escape;
     }
 }

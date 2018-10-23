@@ -3,8 +3,6 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    private const string PAUSE_BUTTON_NAME = "Pause";
-
     private bool isPaused = false;
     private ICloseableMenu activeMenu;
     private float oldTimescale = 1.0f;
@@ -72,7 +70,7 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetButtonDown(PAUSE_BUTTON_NAME))
+        if (InputHandler.GetButtonDown(InputHandler.Input.Pause))
         {
             if(activeMenu != null)
                 activeMenu.Close();

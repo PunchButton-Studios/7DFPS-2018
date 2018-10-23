@@ -8,12 +8,8 @@ public class EntityPlayer : Entity
     public Transform head;
 
     [Header("Input")]
-    public string horizontalMovementAxis = "Horizontal";
-    public string verticalMovementAxis = "Vertical";
     public string horizontalLookAxis = "Mouse X";
     public string verticalLookAxis = "Mouse Y";
-    public string actionButton = "Action";
-    public string flashlightButton = "Flashlight";
 
     [Header("Movement")]
     public float movementSpeed = 10.0f;
@@ -122,8 +118,8 @@ public class EntityPlayer : Entity
     #region Movement
     private void Move()
     {
-        float horizontal = Input.GetAxisRaw(horizontalMovementAxis);
-        float vertical = Input.GetAxisRaw(verticalMovementAxis);
+        float horizontal = InputHandler.GetAxis(InputHandler.Input.MovementHorizontal);
+        float vertical = InputHandler.GetAxis(InputHandler.Input.MovementVertical);
 
         Vector3 strafeMovement = transform.right * horizontal;
         Vector3 forwardMovement = transform.forward * vertical;
@@ -179,14 +175,14 @@ public class EntityPlayer : Entity
 
     private void Action(Activatable activatable)
     {
-        if (Input.GetButton(actionButton))
+        if (InputHandler.GetButton(InputHandler.Input.Action))
             activatable?.Activate(this);
     }
     #endregion
 
     private void ToggleFlashlight()
     {
-        if (Input.GetButtonDown(flashlightButton) && energy > 0.0f)
+        if (InputHandler.GetButtonDown(InputHandler.Input.Flashlight) && energy > 0.0f)
         {
             flashlightState = !flashlightState;
             flashlightAudio.Play(flashlightState ? 0 : 1);
