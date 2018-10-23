@@ -2310,7 +2310,7 @@ MonoBehaviour:
   flashlight: {fileID: 108327680211744820}
   flashlightToggleSpeed: 0.7
   energy: 1
-  flashlightEnergyCost: 0.002
+  flashlightEnergyCost: 0.003
   passiveEnergyCost: 0.0006
   homeCallFreeSpaceRange: {x: 5, y: 0.5, z: 5}
   homeCallCollisionMask:

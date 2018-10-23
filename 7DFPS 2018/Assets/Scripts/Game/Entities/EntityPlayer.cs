@@ -143,6 +143,8 @@ public class EntityPlayer : Entity
             Action(activatable);
             ToggleFlashlight();
         }
+        else
+            isMoving = false;
     }
 
     private void UpdateGUI(Activatable activatable, bool canCallHome) => gui.UpdateGUI(activatable, canCallHome, this);

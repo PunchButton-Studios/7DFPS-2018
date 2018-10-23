@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ActivatableOre : Activatable, IWorldGenObject
 {
-    public string activateText = "Tag Ore";
+    public string activateText = "Tag Cobalt Ore";
     public GameObject tagObjectPrefab;
     private bool tagged;
 
