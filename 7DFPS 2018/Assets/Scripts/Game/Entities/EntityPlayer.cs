@@ -23,6 +23,7 @@ public class EntityPlayer : Entity
     public float maxFallSpeed = 20.0f;
     
     private bool isMoving = false;
+    private float rotationChange = 0.0f;
 
     [Header("Action")]
     public float maxActivateRange = 2.5f;
@@ -51,7 +52,11 @@ public class EntityPlayer : Entity
     [Header("Effects")]
     public CameraController cameraController;
     public AudioController jointAudio, impactAudio, flashlightAudio, batteryAudio;
+    public AudioSource rotateAudio;
     public float jointVolumeIncreaseSpeed = 0.1f, jointVolumeDecreaseSpeed = 0.25f;
+    public float rotateVolumeEffect = 1.0f, rotatePitchEffect = 1.0f;
+    public float rotateMaxVolume = 1.0f, rotateMaxPitch = 2.0f, rotateMinPitch = 0.5f;
+    public float rotateVolumeLerpSpeed = 0.8f, rotatePitchLerpSpeed = 0.8f;
 
     private bool playedBatteryAlarm = false;
 
@@ -142,6 +147,8 @@ public class EntityPlayer : Entity
         lookXAngle -= mouseY * lookSpeed;
         lookXAngle = Mathf.Clamp(lookXAngle, lookMinAngle, lookMaxAngle);
         head.transform.localRotation = Quaternion.Euler(lookXAngle, 0, 0);
+
+        rotationChange = Mathf.Abs(mouseX) + Mathf.Abs(mouseY);
     }
 
     private void Fall()
@@ -269,6 +276,8 @@ public class EntityPlayer : Entity
         }
         
         jointAudio.Volume = Mathf.MoveTowards(jointAudio.Volume, isMoving ? 1 : 0, (isMoving ? jointVolumeIncreaseSpeed : jointVolumeDecreaseSpeed));
+        rotateAudio.volume = Mathf.Clamp(Mathf.Lerp(rotateAudio.volume, rotationChange / rotateVolumeEffect, rotateVolumeLerpSpeed), 0, rotateMaxVolume);
+        rotateAudio.pitch = Mathf.Clamp(Mathf.Lerp(rotateAudio.pitch, rotationChange / rotatePitchEffect + rotateMinPitch, rotatePitchLerpSpeed), rotateMinPitch, rotateMaxPitch);
     }
 
     private void OnDrawGizmosSelected()
