@@ -11,7 +11,7 @@ public class PlayerGUI : MonoBehaviour
     public Image anxietyOverlay;
     public Image activationProgressCircle;
 
-    public Image batteryImage, batteryBarImage;
+    public Image batteryImage, batteryBarImage, batteryChargeImage, batteryChargeProgressImage;
     public Color[] batteryColors = new Color[4] { Color.gray, Color.red, Color.yellow, Color.green };
 
     public Image callHomeImage, callHomeProgressImage;
@@ -42,7 +42,7 @@ public class PlayerGUI : MonoBehaviour
 
         UpdateHomeCallInfo(canCallHome, player);
         UpdateAnxiety(player.anxiety, player.maxAnxiety);
-        UpdateBattery(player.energy);
+        UpdateBattery(player.energy, player.isCharging);
         UpdateResourceList();
         UpdatePrompts(targetActivatable != null, canCallHome);
     }
@@ -54,7 +54,7 @@ public class PlayerGUI : MonoBehaviour
         anxietyOverlay.color = c;
     }
 
-    private void UpdateBattery(float energy)
+    private void UpdateBattery(float energy, bool charging)
     {
         int state = (int)Mathf.Ceil(energy * 3);
         batteryImage.color = batteryBarImage.color = batteryColors[state];
@@ -63,6 +63,15 @@ public class PlayerGUI : MonoBehaviour
             batteryImage.enabled = batteryBarImage.enabled = Mathf.Round(Time.unscaledTime) % 2 == 0;
         else
             batteryImage.enabled = batteryBarImage.enabled = true;
+
+        batteryChargeImage.enabled = charging;
+        batteryChargeProgressImage.enabled = charging;
+
+        if(charging)
+        {
+            batteryChargeProgressImage.fillAmount = energy;
+            batteryChargeProgressImage.color = progressCircleColorGradient.Evaluate(energy);
+        }
     }
 
     private void UpdateHomeCallInfo(bool canCallHome, EntityPlayer player)

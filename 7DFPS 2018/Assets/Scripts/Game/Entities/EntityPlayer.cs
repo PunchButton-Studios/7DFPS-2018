@@ -47,6 +47,7 @@ public class EntityPlayer : Entity
 
     [Header("Energy")]
     [Range(0,1)] public float energy = 1.0f;
+    public bool isCharging = false;
     public float flashlightEnergyCost = 0.001f;
     public float passiveEnergyCost = 0.0001f;
 
