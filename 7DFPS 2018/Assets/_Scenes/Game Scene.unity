@@ -185,7 +185,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 139988725}
-  maxDistance: 80
+  maxDistance: 250
   scale: 1
 --- !u!4 &139988725 stripped
 Transform:
