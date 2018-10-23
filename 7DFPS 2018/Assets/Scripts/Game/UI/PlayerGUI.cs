@@ -15,6 +15,8 @@ public class PlayerGUI : MonoBehaviour
 
     public Text oreResourceCountText;
 
+    public GameObject activatePrompt;
+
     public void UpdateGUI(Activatable targetActivatable, EntityPlayer player)
     {
         reticle.active = targetActivatable != null;
@@ -29,6 +31,7 @@ public class PlayerGUI : MonoBehaviour
         UpdateAnxiety(player.anxiety, player.maxAnxiety);
         UpdateBattery(player.energy);
         UpdateResourceList();
+        UpdatePrompts(targetActivatable != null);
     }
 
     private void UpdateAnxiety(float anxiety, float maxAnxiety)
@@ -52,5 +55,10 @@ public class PlayerGUI : MonoBehaviour
     private void UpdateResourceList()
     {
         oreResourceCountText.text = BaseController.Main.ore.ToString() + (BaseController.Main.retrievingOre > 0 ? $" +{BaseController.Main.retrievingOre.ToString()}" : string.Empty);
+    }
+
+    private void UpdatePrompts(bool hasTargetActivatable)
+    {
+        activatePrompt.SetActive(hasTargetActivatable);
     }
 }
