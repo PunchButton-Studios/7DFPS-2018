@@ -42,7 +42,7 @@ public class EntityPlayer : Entity
     public Light flashlight;
     public float flashlightToggleSpeed = 0.3f;
     private float flashlightTransition = 0.0f;
-    private bool flashlightState = true;
+    private bool flashlightState = false;
 
     [Header("Energy")]
     [Range(0,1)] public float energy = 1.0f;

@@ -5,6 +5,7 @@ public class Config
 {
     public float volume = 0.6f;
     public bool vsync = false;
+    public bool buttonPrompts = true;
 
     public Keybinds keybinds;
 

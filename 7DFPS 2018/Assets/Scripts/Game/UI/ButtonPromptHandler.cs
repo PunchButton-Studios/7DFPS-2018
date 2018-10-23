@@ -19,27 +19,32 @@ public class ButtonPromptHandler : MonoBehaviour
 
     private void Awake()
     {
-        foreach(Prompt prompt in prompts)
+        if (!Config.Main.buttonPrompts)
+            gameObject.SetActive(false);
+        else
         {
-            KeyCode keyCode = InputHandler.GetKeyCode(prompt.input)[0];
-            switch(keyCode)
+            foreach (Prompt prompt in prompts)
             {
-                case KeyCode.Mouse0:
-                    prompt.image.sprite = leftMouse;
-                    prompt.text.text = string.Empty;
-                    break;
-                case KeyCode.Mouse1:
-                    prompt.image.sprite = rightMouse;
-                    prompt.text.text = string.Empty;
-                    break;
-                case KeyCode.Mouse2:
-                    prompt.image.sprite = middleMouse;
-                    prompt.text.text = string.Empty;
-                    break;
-                default:
-                    prompt.image.sprite = button;
-                    prompt.text.text = keyCode.ToString();
-                    break;
+                KeyCode keyCode = InputHandler.GetKeyCode(prompt.input)[0];
+                switch (keyCode)
+                {
+                    case KeyCode.Mouse0:
+                        prompt.image.sprite = leftMouse;
+                        prompt.text.text = string.Empty;
+                        break;
+                    case KeyCode.Mouse1:
+                        prompt.image.sprite = rightMouse;
+                        prompt.text.text = string.Empty;
+                        break;
+                    case KeyCode.Mouse2:
+                        prompt.image.sprite = middleMouse;
+                        prompt.text.text = string.Empty;
+                        break;
+                    default:
+                        prompt.image.sprite = button;
+                        prompt.text.text = keyCode.ToString();
+                        break;
+                }
             }
         }
     }
