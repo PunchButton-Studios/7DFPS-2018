@@ -21,6 +21,7 @@ public class KoboldSpawner : MonoBehaviour
 
     private void Awake()
     {
+        timer = Random.Range(minInterval, maxInterval);
         GameManager.Main.saveGameEvent += OnSaveGame;
         GameManager.Main.loadGameEvent += OnLoadGame;
     }
@@ -39,13 +40,10 @@ public class KoboldSpawner : MonoBehaviour
         saveData.worldData.koboldTimer = timer;
     }
 
-    private void Start()
-    {
-        timer = Random.Range(minInterval, maxInterval);
-    }
-
     private void Update()
     {
+        if (GameManager.GamePaused)
+            return;
         timer -= Time.deltaTime;
 
         if(timer < 0.0f)
