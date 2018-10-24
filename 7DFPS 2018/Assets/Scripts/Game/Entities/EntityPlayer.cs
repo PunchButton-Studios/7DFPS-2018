@@ -42,6 +42,7 @@ public class EntityPlayer : Entity
     [Header("Flashlight")]
     public Light flashlight;
     public float flashlightToggleSpeed = 0.3f;
+    public float flashlightIntensity = 600.0f;
     private float flashlightTransition = 0.0f;
     private bool flashlightState = false;
 
@@ -275,7 +276,7 @@ public class EntityPlayer : Entity
         if (flashlightTransition > 0.0f)
         {
             flashlight.enabled = true;
-            flashlight.intensity = flashlightTransition;
+            flashlight.intensity = flashlightTransition * flashlightIntensity;
         }
         else
             flashlight.enabled = false;
