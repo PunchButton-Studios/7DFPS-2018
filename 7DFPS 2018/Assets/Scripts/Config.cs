@@ -7,7 +7,7 @@ public class Config
     public bool vsync = false;
     public bool buttonPrompts = true;
 
-    public Keybinds keybinds;
+    public Keybinds keybinds = new Keybinds();
 
     private static Config main;
     public static Config Main
