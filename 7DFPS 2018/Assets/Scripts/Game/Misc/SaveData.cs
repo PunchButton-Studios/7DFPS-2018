@@ -96,6 +96,8 @@ public class SaveData
         public byte[] map = new byte[0];
         public byte[] extraData = new byte[0];
         public int mapSize = 0;
+        public int kobolds = 0;
+        public float koboldTimer = 0.0f;
 
         public void SaveExtraData(IWorldGenObject worldGenObject, byte data)
         {

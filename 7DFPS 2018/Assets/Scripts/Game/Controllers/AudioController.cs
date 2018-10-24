@@ -39,4 +39,9 @@ public class AudioController : MonoBehaviour
         lastClipId = (lastClipId + 1) % clips.Length;
         audioSource.PlayOneShot(clips[lastClipId]);
     }
+
+    public void Stop()
+    {
+        audioSource.Stop();
+    }
 }

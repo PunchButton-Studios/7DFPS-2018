@@ -230,6 +230,24 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &1306253186866194
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4274854961829690}
+  - component: {fileID: 108426535817443044}
+  - component: {fileID: 114880809396114438}
+  - component: {fileID: 114682756376113040}
+  m_Layer: 10
+  m_Name: Passive Light
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &1315853891222558
 GameObject:
   m_ObjectHideFlags: 1
@@ -571,9 +589,7 @@ GameObject:
   - component: {fileID: 4642867996469832}
   - component: {fileID: 143574555526646670}
   - component: {fileID: 114738666737656568}
-  - component: {fileID: 108682220889192948}
-  - component: {fileID: 114229608749319378}
-  - component: {fileID: 114864485484766968}
+  - component: {fileID: 114359212028775036}
   m_Layer: 10
   m_Name: Player
   m_TagString: Untagged
@@ -766,11 +782,24 @@ Transform:
   m_GameObject: {fileID: 1179668825234748}
   m_LocalRotation: {x: 0.01745245, y: -0, z: -0, w: 0.99984777}
   m_LocalPosition: {x: 0, y: 0.15000004, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 50, y: 50, z: 50}
   m_Children: []
   m_Father: {fileID: 4652609862889248}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 2, y: 0, z: 0}
+--- !u!4 &4274854961829690
+Transform:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1306253186866194}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 50, y: 50, z: 50}
+  m_Children: []
+  m_Father: {fileID: 4642867996469832}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4302942358956676
 Transform:
   m_ObjectHideFlags: 1
@@ -782,7 +811,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4642867996469832}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4642867996469832
 Transform:
@@ -794,6 +823,7 @@ Transform:
   m_LocalPosition: {x: 40, y: 1, z: 40}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
+  - {fileID: 4274854961829690}
   - {fileID: 4652609862889248}
   - {fileID: 224352808202163274}
   - {fileID: 4302942358956676}
@@ -813,7 +843,7 @@ Transform:
   m_Children:
   - {fileID: 4248266086165182}
   m_Father: {fileID: 4642867996469832}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4761844138478972
 Transform:
@@ -826,7 +856,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4642867996469832}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!20 &20807251510460130
 Camera:
@@ -1360,7 +1390,7 @@ Light:
   serializedVersion: 8
   m_Type: 0
   m_Color: {r: 0.8679245, g: 0.8508203, b: 0.35617658, a: 1}
-  m_Intensity: 47.746483
+  m_Intensity: 31.830988
   m_Range: 50
   m_SpotAngle: 80
   m_CookieSize: 10
@@ -1372,7 +1402,7 @@ Light:
     m_Bias: 0.05
     m_NormalBias: 0.4
     m_NearPlane: 0.2
-  m_Cookie: {fileID: 0}
+  m_Cookie: {fileID: 2800000, guid: 0c88249fed9c86c49a6e16b20d91b69b, type: 3}
   m_DrawHalo: 0
   m_Flare: {fileID: 0}
   m_RenderMode: 0
@@ -1382,22 +1412,22 @@ Light:
   m_Lightmapping: 4
   m_LightShadowCasterMode: 2
   m_AreaSize: {x: 1, y: 1}
-  m_BounceIntensity: 1
+  m_BounceIntensity: 0
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
---- !u!108 &108682220889192948
+--- !u!108 &108426535817443044
 Light:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1814365726795124}
+  m_GameObject: {fileID: 1306253186866194}
   m_Enabled: 1
   serializedVersion: 8
   m_Type: 2
   m_Color: {r: 0, g: 0.61144805, b: 1, a: 1}
-  m_Intensity: 7.957747
+  m_Intensity: 4.774648
   m_Range: 50
   m_SpotAngle: 30
   m_CookieSize: 10
@@ -1816,51 +1846,6 @@ MonoBehaviour:
   m_ChildForceExpandHeight: 1
   m_ChildControlWidth: 0
   m_ChildControlHeight: 0
---- !u!114 &114229608749319378
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1814365726795124}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c6c2871f720b2af4e9210febdac74517, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  version: 1
-  shadowResolution: 512
-  shadowDimmer: 1
-  shadowFadeDistance: 10000
-  contactShadows: 0
-  viewBiasMin: 0.2
-  viewBiasMax: 100
-  viewBiasScale: 1
-  normalBiasMin: 0.5
-  normalBiasMax: 0.5
-  normalBiasScale: 1
-  sampleBiasScale: 0
-  edgeLeakFixup: 1
-  edgeToleranceNormal: 1
-  edgeTolerance: 1
-  shadowCascadeCount: 4
-  shadowCascadeRatios:
-  - 0.05
-  - 0.2
-  - 0.3
-  shadowCascadeBorders:
-  - 0.2
-  - 0.2
-  - 0.2
-  - 0.2
-  shadowAlgorithm: 0
-  shadowVariant: 2
-  shadowPrecision: 0
-  shadowData:
-    format: 0
-    data: 000000000000803f
-  shadowDatas:
-  - format: 0
-    data: 000000000000803f
 --- !u!114 &114239377212920310
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2092,6 +2077,24 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114359212028775036
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1814365726795124}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9adf4d08aaf2d0b4d8ee5b03bcc2ed40, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  koboldPrefab: {fileID: 1077851444198774, guid: 93e4e6f27673c6b4283ed686a50316fc,
+    type: 2}
+  maxKobolds: 10
+  minInterval: 60
+  maxInterval: 260
+  minRange: 10
+  maxRange: 30
 --- !u!114 &114369961611593796
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2650,6 +2653,51 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114682756376113040
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1306253186866194}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6c2871f720b2af4e9210febdac74517, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 1
+  shadowResolution: 512
+  shadowDimmer: 1
+  shadowFadeDistance: 10000
+  contactShadows: 0
+  viewBiasMin: 0.2
+  viewBiasMax: 100
+  viewBiasScale: 1
+  normalBiasMin: 0.5
+  normalBiasMax: 0.5
+  normalBiasScale: 1
+  sampleBiasScale: 0
+  edgeLeakFixup: 1
+  edgeToleranceNormal: 1
+  edgeTolerance: 1
+  shadowCascadeCount: 4
+  shadowCascadeRatios:
+  - 0.05
+  - 0.2
+  - 0.3
+  shadowCascadeBorders:
+  - 0.2
+  - 0.2
+  - 0.2
+  - 0.2
+  shadowAlgorithm: 0
+  shadowVariant: 2
+  shadowPrecision: 0
+  shadowData:
+    format: 0
+    data: 000000000000803f
+  shadowDatas:
+  - format: 0
+    data: 000000000000803f
 --- !u!114 &114731872000778120
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2715,7 +2763,10 @@ MonoBehaviour:
   lightCheckRange: 16
   flashlight: {fileID: 108327680211744820}
   flashlightToggleSpeed: 0.7
-  flashlightIntensity: 600
+  flashlightIntensity: 400
+  flashlightDetectRange: 20
+  flashlightDetectAngle: 15
+  flashlightState: 0
   energy: 1
   isCharging: 0
   flashlightEnergyCost: 0.003
@@ -2778,6 +2829,8 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   homeCallTimeMultiplier: 0.0025
+  viewRange: 50
+  viewAngle: 50
   cameraController: {fileID: 114930843393507064}
   jointAudio: {fileID: 114151661370807004}
   impactAudio: {fileID: 114959264122491708}
@@ -2909,7 +2962,7 @@ MonoBehaviour:
   useOldInspector: 0
   featuresFoldout: 1
   showAdditionalSettings: 0
-  displayLightIntensity: 600
+  displayLightIntensity: 400
   displayAreaLightEmissiveMesh: 0
 --- !u!114 &114820443107205536
 MonoBehaviour:
@@ -2925,43 +2978,6 @@ MonoBehaviour:
   audioSource: {fileID: 82225511457568062}
   clips:
   - {fileID: 8300000, guid: e2f32d143a8b28d4ebfdb8217216fdf8, type: 3}
---- !u!114 &114864485484766968
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1814365726795124}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7a68c43fe1f2a47cfa234b5eeaa98012, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  version: 1.1
-  directionalIntensity: 3.1415927
-  punctualIntensity: 600
-  areaIntensity: 200
-  enableSpotReflector: 0
-  m_InnerSpotPercent: 0
-  lightDimmer: 1
-  volumetricDimmer: 1
-  lightUnit: 0
-  fadeDistance: 10000
-  affectDiffuse: 1
-  affectSpecular: 1
-  nonLightmappedOnly: 0
-  lightTypeExtent: 0
-  spotLightShape: 0
-  shapeWidth: 0.5
-  shapeHeight: 0.5
-  aspectRatio: 1
-  shapeRadius: 0
-  maxSmoothness: 1
-  applyRangeAttenuation: 1
-  useOldInspector: 0
-  featuresFoldout: 1
-  showAdditionalSettings: 0
-  displayLightIntensity: 100
-  displayAreaLightEmissiveMesh: 0
 --- !u!114 &114873413031163674
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3022,6 +3038,43 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114880809396114438
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1306253186866194}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a68c43fe1f2a47cfa234b5eeaa98012, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 1.1
+  directionalIntensity: 3.1415927
+  punctualIntensity: 600
+  areaIntensity: 200
+  enableSpotReflector: 0
+  m_InnerSpotPercent: 0
+  lightDimmer: 1
+  volumetricDimmer: 1
+  lightUnit: 0
+  fadeDistance: 50
+  affectDiffuse: 1
+  affectSpecular: 1
+  nonLightmappedOnly: 0
+  lightTypeExtent: 0
+  spotLightShape: 0
+  shapeWidth: 0.5
+  shapeHeight: 0.5
+  aspectRatio: 1
+  shapeRadius: 0
+  maxSmoothness: 1
+  applyRangeAttenuation: 0
+  useOldInspector: 0
+  featuresFoldout: 1
+  showAdditionalSettings: 1
+  displayLightIntensity: 60
+  displayAreaLightEmissiveMesh: 0
 --- !u!114 &114884076487566310
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3860,7 +3913,7 @@ RectTransform:
   - {fileID: 224506785568572030}
   - {fileID: 224076443597706098}
   m_Father: {fileID: 4642867996469832}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}

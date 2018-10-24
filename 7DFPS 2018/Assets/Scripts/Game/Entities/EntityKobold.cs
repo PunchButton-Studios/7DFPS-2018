@@ -16,6 +16,14 @@ public class EntityKobold : Entity
     [Header("AI")]
     public float playerDetectionRange = 20;
     public Vector3 playerDetectionOffset = new Vector3(0, 1, 15);
+    private bool diveAway = false;
+
+    [Header("Teleportation")]
+    public float teleportMinInterval = 5, teleportMaxInterval = 15;
+    public float teleportTauntChance = 0.05f;
+    public float teleportMinDistance = 3.0f, teleportMaxDistance = 8.0f;
+    public LayerMask teleportCheckMask;
+    private float teleportTimer;
 
     [Header("SFX")]
     public AudioController idleSfxAudio;
@@ -28,6 +36,7 @@ public class EntityKobold : Entity
         base.Start();
         nextIdleSfx = Time.time + Random.Range(idleSfxMinInterval, idleSfxMaxInterval);
         player = FindObjectOfType<EntityPlayer>();
+        playerHead = player.head;
     }
 
     protected override void Update()
@@ -36,6 +45,29 @@ public class EntityKobold : Entity
         PlayIdleSFX();
         SeekPlayer();
         MoveHead();
+        DiveAway();
+
+        if (state == State.Active)
+        {
+            if (!WithinView(playerHead, transform, player.viewAngle, player.viewRange, teleportCheckMask))
+                Teleport();
+            else
+            {
+                if (player.flashlightState && WithinView(playerHead, transform, player.flashlightDetectAngle, player.flashlightDetectRange, teleportCheckMask))
+                {
+                    state = State.Fleeing;
+                    diveAway = true;
+                    activeSfxAudio.Stop();
+                    fleeSfxAudio.PlayRandom();
+                    Destroy(gameObject, 5.0f);
+                }
+                else if (!diveAway)
+                {
+                    diveAway = true;
+                    activeSfxAudio.PlayRandom();
+                }
+            }
+        }
     }
 
     private void SeekPlayer()
@@ -54,6 +86,45 @@ public class EntityKobold : Entity
         {
             Vector3 direction = playerHead.position - head.position;
             head.rotation = Quaternion.RotateTowards(head.rotation, Quaternion.LookRotation(direction, Vector3.up), headMovementSpeed * Time.deltaTime);
+        }
+    }
+
+    private void Teleport()
+    {
+        teleportTimer -= Time.deltaTime;
+        if(teleportTimer < 0)
+        {
+            teleportTimer = Random.Range(teleportMinInterval, teleportMaxInterval);
+            bool foundSpot = false;
+            Vector3 newSpot = new Vector3();
+            int attempts = 0;
+            while(!foundSpot && attempts < 60)
+            {
+                newSpot = (Quaternion.Euler(0, Random.value * 360, 0) * Vector3.forward) * Random.Range(teleportMinDistance, teleportMaxDistance);
+                newSpot += player.transform.position;
+
+                Vector3 direction = newSpot - playerHead.position;
+                if(!Physics.Raycast(playerHead.position, direction.normalized, direction.magnitude, teleportCheckMask))
+                    foundSpot = !WithinView(playerHead, newSpot, player.viewAngle, player.viewRange, teleportCheckMask);
+
+                attempts++;
+            }
+
+            if (foundSpot)
+            {
+                diveAway = false;
+                transform.position = newSpot;
+                if (Random.value < teleportTauntChance)
+                    activeSfxAudio.PlayRandom();
+            }
+        }
+    }
+
+    private void DiveAway()
+    {
+        if(diveAway)
+        {
+            transform.position = Vector3.Lerp(transform.position, new Vector3(transform.position.x, -2.0f, transform.position.z), Time.deltaTime);
         }
     }
 

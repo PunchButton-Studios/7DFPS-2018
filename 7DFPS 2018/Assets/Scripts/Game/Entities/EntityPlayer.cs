@@ -35,6 +35,8 @@ public class EntityPlayer : Entity
     public float anxiety = 0.0f;
     public float maxAnxiety = 128.0f;
     public float darknessAnxiety = 1.0f;
+    private KoboldSpawner koboldSpawner;
+    public float anxietyPerKobold = 0.8f;
     public float flashlightAnxietyModifier = 0.3f;
     public LayerMask anxietyMask;
     public float lightCheckRange = 16.0f;
@@ -43,8 +45,9 @@ public class EntityPlayer : Entity
     public Light flashlight;
     public float flashlightToggleSpeed = 0.3f;
     public float flashlightIntensity = 600.0f;
+    public float flashlightDetectRange = 20.0f, flashlightDetectAngle = 15.0f;
     private float flashlightTransition = 0.0f;
-    private bool flashlightState = false;
+    public bool flashlightState = false;
 
     [Header("Energy")]
     [Range(0,1)] public float energy = 1.0f;
@@ -59,6 +62,10 @@ public class EntityPlayer : Entity
     public float homeCallTimerIdleDecrease = 2.0f;
     public AnimationCurve homeCallTimePerDistance;
     public float homeCallTimeMultiplier = 0.25f;
+
+    [Header("View")]
+    public float viewRange = 50.0f;
+    public float viewAngle = 60.0f;
 
     [Header("Effects")]
     public CameraController cameraController;
@@ -118,6 +125,7 @@ public class EntityPlayer : Entity
     {
         base.Start();
         bobTimer = bobInit;
+        koboldSpawner = FindObjectOfType<KoboldSpawner>();
     }
 
     protected override void Update()
@@ -317,10 +325,10 @@ public class EntityPlayer : Entity
             }
         }
 
-        modifier *= (flashlightTransition * flashlightAnxietyModifier);
+        modifier *= 1 - (flashlightTransition * (1 - flashlightAnxietyModifier));
 
         if (modifier > 0.0f)
-            anxiety += darknessAnxiety * modifier * Time.deltaTime;
+            anxiety += (darknessAnxiety * modifier + koboldSpawner.KoboldCount * anxietyPerKobold) * Time.deltaTime;
 
         anxiety = Mathf.Clamp(anxiety, 0, maxAnxiety);
     }
@@ -361,5 +369,15 @@ public class EntityPlayer : Entity
 
         Gizmos.color = Color.red;
         Gizmos.DrawWireCube(transform.position, homeCallFreeSpaceRange * 2);
+
+        Gizmos.color = Color.green;
+        Gizmos.DrawRay(transform.position, transform.forward * flashlightDetectRange);
+        Gizmos.DrawRay(transform.position, (Quaternion.Euler(0, flashlightDetectAngle, 0) * transform.forward).normalized * flashlightDetectRange);
+        Gizmos.DrawRay(transform.position, (Quaternion.Euler(0, -flashlightDetectAngle, 0) * transform.forward).normalized * flashlightDetectRange);
+
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawRay(transform.position, transform.forward * viewRange);
+        Gizmos.DrawRay(transform.position, (Quaternion.Euler(0, viewAngle, 0) * transform.forward).normalized * viewRange);
+        Gizmos.DrawRay(transform.position, (Quaternion.Euler(0, -viewAngle, 0) * transform.forward).normalized * viewRange);
     }
 }
