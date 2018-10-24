@@ -23,6 +23,13 @@ public class PlayerGUI : MonoBehaviour
 
     public GameObject activatePrompt, callHomePrompt;
 
+    public GameObject loadScreen;
+
+    private void Update()
+    {
+        loadScreen.SetActive(GameManager.isLoading);
+    }
+
     public void UpdateGUI(Activatable targetActivatable, bool canCallHome, EntityPlayer player)
     {
         reticle.active = targetActivatable != null;

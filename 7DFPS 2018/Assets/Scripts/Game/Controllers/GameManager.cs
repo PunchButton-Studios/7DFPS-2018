@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviour
 
     public static string saveName = "New Save";
     public static StartState startState = StartState.NewGame;
+    public static bool isLoading = false;
 
     private static GameManager main;
 
@@ -28,7 +29,7 @@ public class GameManager : MonoBehaviour
     {
         get
         {
-            return Main.isPaused;
+            return Main.isPaused || isLoading;
         }
         set
         {
@@ -70,7 +71,7 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        if (InputHandler.GetButtonDown(InputHandler.Input.Pause))
+        if (InputHandler.GetButtonDown(InputHandler.Input.Pause) && !isLoading)
         {
             if(activeMenu != null)
                 activeMenu.Close();
@@ -90,7 +91,7 @@ public class GameManager : MonoBehaviour
 
     public void Pause(bool pauseState)
     {
-        if (pauseState == isPaused)
+        if (pauseState == isPaused || isLoading)
             return; //Ignore
 
         if (pauseState)

@@ -36,7 +36,7 @@ public class WorldGenerator : MonoBehaviour
     {
         map = System.Array.ConvertAll(saveData.worldData.map, (b) => (MapTile)b);
         mapSize = saveData.worldData.mapSize;
-        PlaceTiles(saveData.worldData.extraData);
+        StartCoroutine(PlaceTiles(saveData.worldData.extraData));
     }
 
     private void OnSaveGame(SaveData saveData)
@@ -104,7 +104,7 @@ public class WorldGenerator : MonoBehaviour
 
         ConnectOrigins(origins);
 
-        PlaceTiles();
+        StartCoroutine(PlaceTiles());
     }
 
     private void ConnectOrigins(Vector2Int[] origins)
@@ -250,8 +250,11 @@ public class WorldGenerator : MonoBehaviour
             return new Vector2Int(-v2Int.y, v2Int.x);
     }
 
-    private void PlaceTiles(byte[] saveData = null)
+    private IEnumerator PlaceTiles(byte[] saveData = null)
     {
+        GameManager.isLoading = true;
+        Time.timeScale = 0.0f;
+
         Dictionary<Vector2Int, Chunk> chunks = new Dictionary<Vector2Int, Chunk>();
 
         for(int y = 0; y < mapSize; y++)
@@ -276,12 +279,19 @@ public class WorldGenerator : MonoBehaviour
                     PopulateTile(mapTile, new Vector2Int(x, y), tileSaveData);
                 }
             }
+            yield return new WaitForEndOfFrame();
         }
 
         GameObject chunkHolder = new GameObject("Chunks");
         chunkHolder.transform.parent = chunkHandler.transform;
         foreach (Vector2Int key in chunks.Keys)
+        {
             CombineMeshes(chunks[key], key, chunkHolder.transform);
+            yield return new WaitForEndOfFrame();
+        }
+
+        GameManager.isLoading = false;
+        Time.timeScale = 1.0f;
     }
 
     private void PlaceWalls(int x, int y, Chunk chunk)
