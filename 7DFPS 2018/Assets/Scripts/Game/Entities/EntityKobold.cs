@@ -42,6 +42,10 @@ public class EntityKobold : Entity
     protected override void Update()
     {
         base.Update();
+
+        if (GameManager.GamePaused)
+            return;
+
         PlayIdleSFX();
         SeekPlayer();
         MoveHead();
