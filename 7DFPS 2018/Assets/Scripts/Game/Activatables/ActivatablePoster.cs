@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class ActivatablePoster : ActivatableBaseObject, IRelaxationObject
 {
+    private const string MAIN_TEXTURE_NODE_NAME = "_BaseColorMap";
+
     private string filepath = string.Empty;
     private Material material;
 
@@ -42,7 +44,7 @@ public class ActivatablePoster : ActivatableBaseObject, IRelaxationObject
             texture2D.LoadImage(data);
             texture2D.filterMode = FilterMode.Point;
         }
-        material.mainTexture = texture2D;
+        material.SetTexture(MAIN_TEXTURE_NODE_NAME, texture2D);
         Slot.extraData = extraData;
     }
 }
