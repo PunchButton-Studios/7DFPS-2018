@@ -48,7 +48,8 @@ public class ActivatableOre : Activatable, IWorldGenObject
         if (!tagged)
         {
             tagged = true;
-            Instantiate(tagObjectPrefab, transform.position, transform.rotation);
+            GameObject tagObject = Instantiate(tagObjectPrefab, transform.position, transform.rotation);
+            tagObject.transform.parent = transform;
         }
     }
 

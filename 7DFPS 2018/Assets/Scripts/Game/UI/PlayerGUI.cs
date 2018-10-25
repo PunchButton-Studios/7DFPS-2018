@@ -21,7 +21,7 @@ public class PlayerGUI : MonoBehaviour
 
     public Text oreResourceCountText;
 
-    public GameObject activatePrompt, callHomePrompt;
+    public GameObject activatePrompt, callHomePrompt, flashlightPrompt;
 
     public GameObject loadScreen;
     private bool loadScreenUsed = false;
@@ -57,7 +57,7 @@ public class PlayerGUI : MonoBehaviour
         UpdateAnxiety(player.anxiety, player.maxAnxiety);
         UpdateBattery(player.energy, player.isCharging);
         UpdateResourceList();
-        UpdatePrompts(targetActivatable != null, canCallHome);
+        UpdatePrompts(targetActivatable != null, canCallHome, player.enabled);
     }
 
     private void UpdateAnxiety(float anxiety, float maxAnxiety)
@@ -100,9 +100,10 @@ public class PlayerGUI : MonoBehaviour
         oreResourceCountText.text = BaseController.Main.ore.ToString() + (BaseController.Main.retrievingOre > 0 ? $" +{BaseController.Main.retrievingOre.ToString()}" : string.Empty);
     }
 
-    private void UpdatePrompts(bool hasTargetActivatable, bool canCallHome)
+    private void UpdatePrompts(bool hasTargetActivatable, bool canCallHome, bool playerControlEnabled)
     {
-        activatePrompt.SetActive(hasTargetActivatable);
-        callHomePrompt.SetActive(canCallHome);
+        activatePrompt.SetActive(hasTargetActivatable && playerControlEnabled);
+        callHomePrompt.SetActive(canCallHome && playerControlEnabled);
+        flashlightPrompt.SetActive(playerControlEnabled);
     }
 }

@@ -19,9 +19,10 @@ public class PlayerDepthTransition : MonoBehaviour
     public Transform tube;
     public Vector3 tubeHoleOffset;
 
-    private Vector3 defaultPosition;
+    private Vector3 defaultPosition, targetPosition;
     public float rotationXTarget = 0.0f;
-    public float rotationXSpeed = 25.0f;
+    private float rotationYTarget;
+    public float rotationSpeed = 25.0f;
     public float forwardOffset = 0.0f;
     public float yOffset = 0.0f;
 
@@ -43,10 +44,18 @@ public class PlayerDepthTransition : MonoBehaviour
         entityPlayer.ResetCameraXAngle();
         defaultPosition = transform.position;
         animator.SetTrigger(transferTrigger);
-        cameraRotateSfx.volume = 0.0f;
+        
+        rotationYTarget = Quaternion.FromToRotation(transform.position, holeCenter).eulerAngles.y;
 
         tube.position = holeCenter + tubeHoleOffset;
+        targetPosition = tube.position;
         active = true;
+    }
+
+    public void UpdateUI()
+    {
+        FindObjectOfType<PlayerGUI>().UpdateGUI(null, false, entityPlayer);
+        cameraRotateSfx.volume = 0.0f;
     }
 
     public void SetupWorldgen()
@@ -59,6 +68,7 @@ public class PlayerDepthTransition : MonoBehaviour
         worldHolder.Translate(0, yOffsetWorldOnWorldgen, 0);
         playerBase.Translate(0, yOffsetWorldOnWorldgen, 0);
         chunkHandler.DestroyChildren();
+        rotationYTarget = 0.0f;
 
         worldGenerator.worldGenCompleteEvent += OnWorldGenComplete;
         worldGenerator.GenerateLevel(100, wgStartPos);
@@ -91,11 +101,19 @@ public class PlayerDepthTransition : MonoBehaviour
 
         playerHead.rotation = Quaternion.RotateTowards(
             playerHead.rotation,
-            Quaternion.Euler(rotationXTarget, playerHead.rotation.eulerAngles.y, 0),
-            rotationXSpeed * Time.deltaTime
+            Quaternion.Euler(rotationXTarget, 0, 0),
+            rotationSpeed * Time.unscaledDeltaTime
             );
 
-        transform.position = defaultPosition + transform.forward * forwardOffset + Vector3.up * yOffset;
+        transform.rotation = Quaternion.RotateTowards(
+            transform.rotation,
+            Quaternion.Euler(0, rotationYTarget, 0),
+            rotationSpeed * Time.unscaledDeltaTime
+            );
+        
+        Vector3 targetXZPos = Vector3.Lerp(defaultPosition, targetPosition, forwardOffset);
+        targetXZPos.y = defaultPosition.y;
+        transform.position = targetXZPos + Vector3.up * yOffset;
     }
 
     public void PlayImpactSFX()

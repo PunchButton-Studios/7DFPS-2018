@@ -5269,11 +5269,6 @@ Prefab:
       objectReference: {fileID: 783478683}
     - target: {fileID: 224096113454553148, guid: fda47d9282d1c8f4aa924672d40bed43,
         type: 2}
-      propertyPath: m_AnchoredPosition.x
-      value: 32.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 224096113454553148, guid: fda47d9282d1c8f4aa924672d40bed43,
-        type: 2}
       propertyPath: m_AnchorMin.y
       value: 0
       objectReference: {fileID: 0}
@@ -5281,6 +5276,11 @@ Prefab:
         type: 2}
       propertyPath: m_AnchorMax.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224096113454553148, guid: fda47d9282d1c8f4aa924672d40bed43,
+        type: 2}
+      propertyPath: m_AnchoredPosition.x
+      value: 32.5
       objectReference: {fileID: 0}
     - target: {fileID: 224096113454553148, guid: fda47d9282d1c8f4aa924672d40bed43,
         type: 2}
@@ -5471,11 +5471,6 @@ Prefab:
         type: 2}
       propertyPath: m_LocalPosition.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 114988359862688982, guid: fda47d9282d1c8f4aa924672d40bed43,
-        type: 2}
-      propertyPath: tubeHoleOffset.y
-      value: -249.9
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fda47d9282d1c8f4aa924672d40bed43, type: 2}

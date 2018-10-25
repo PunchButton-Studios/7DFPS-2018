@@ -13,10 +13,7 @@ public class PosterMenu : MonoBehaviour, ICloseableMenu
     private void OnApplicationFocus(bool focus)
     {
         if (focus)
-        {
-            ClearList();
             SetupList();
-        }
     }
 
     public void Open(ActivatablePoster poster)
@@ -51,6 +48,7 @@ public class PosterMenu : MonoBehaviour, ICloseableMenu
 
     private void SetupList()
     {
+        ClearList();
         string path = $@"{Application.streamingAssetsPath}\poster";
         DirectoryInfo directoryInfo = new DirectoryInfo(path);
         if (!directoryInfo.Exists)

@@ -96,7 +96,6 @@ public class WorldGenerator : MonoBehaviour
             else
                 direction.y = (origins[i].y < size * 0.5) ? 1 : -1;
 
-            Debug.Log($"{origins[i]} ~ ({origins[i].x + (origins[i].y * mapSize)})");
             map[origins[i].x + (origins[i].y * mapSize)] = i == 0 ? MapTile.EmptyTile : MapTile.HoleTile;
             queuedTiles.Enqueue(new QueuedTile(origins[i] + direction, direction));
         }
