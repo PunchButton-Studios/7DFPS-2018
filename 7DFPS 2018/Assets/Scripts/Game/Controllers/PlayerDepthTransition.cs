@@ -72,6 +72,8 @@ public class PlayerDepthTransition : MonoBehaviour
         chunkHandler.DestroyChildren();
         rotationYTarget = 0.0f;
 
+        MusicHandler.Main.PlayNext();
+
         worldGenerator.worldGenCompleteEvent += OnWorldGenComplete;
         worldGenerator.GenerateLevel(100, wgStartPos);
     }
