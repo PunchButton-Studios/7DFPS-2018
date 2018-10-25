@@ -17,6 +17,8 @@ public class PlayerGUI : MonoBehaviour
     public Image callHomeImage, callHomeProgressImage;
     public Color[] callHomeColors = new Color[2] { Color.red, Color.green };
 
+    public Image timerBarImage;
+
     public Gradient progressCircleColorGradient;
 
     public Text oreResourceCountText;
@@ -56,6 +58,7 @@ public class PlayerGUI : MonoBehaviour
         UpdateHomeCallInfo(canCallHome, player);
         UpdateAnxiety(player.anxiety, player.maxAnxiety);
         UpdateBattery(player.energy, player.isCharging);
+        UpdateTimer(player.timeLimit, player.maxTimeLimit);
         UpdateResourceList();
         UpdatePrompts(targetActivatable != null, canCallHome, player.enabled);
     }
@@ -105,5 +108,12 @@ public class PlayerGUI : MonoBehaviour
         activatePrompt.SetActive(hasTargetActivatable && playerControlEnabled);
         callHomePrompt.SetActive(canCallHome && playerControlEnabled);
         flashlightPrompt.SetActive(playerControlEnabled);
+    }
+
+    private void UpdateTimer(float time, float maxTime)
+    {
+        float progress = time / maxTime;
+        timerBarImage.fillAmount = progress;
+        timerBarImage.color = progressCircleColorGradient.Evaluate(progress);
     }
 }

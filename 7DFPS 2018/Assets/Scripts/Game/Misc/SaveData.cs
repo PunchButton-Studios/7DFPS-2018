@@ -69,6 +69,8 @@ public class SaveData
         public float energy = 0.0f;
         public Vector3 position = new Vector3(0, 0, 0);
         public Quaternion rotation = Quaternion.identity;
+        public bool flashlight = false;
+        public float timeLeft = 1.0f;
     }
 
     public class BaseData

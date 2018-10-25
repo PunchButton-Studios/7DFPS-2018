@@ -41,6 +41,11 @@ public class EntityPlayer : Entity
     public LayerMask anxietyMask;
     public float lightCheckRange = 16.0f;
 
+    [Header("Time Limit")]
+    public float timeLimit = 1800.0f;
+    public float maxTimeLimit = 1800.0f;
+    public float anxietyTimeDecrease = 2.0f;
+
     [Header("Flashlight")]
     public Light flashlight;
     public float flashlightToggleSpeed = 0.3f;
@@ -100,6 +105,7 @@ public class EntityPlayer : Entity
 
     protected override void Awake()
     {
+        timeLimit = maxTimeLimit;
         GameManager.Main.loadGameEvent += OnGameLoaded;
         GameManager.Main.saveGameEvent += OnGameSave;
     }
@@ -110,6 +116,8 @@ public class EntityPlayer : Entity
         saveData.playerData.energy = this.energy;
         saveData.playerData.position = transform.position;
         saveData.playerData.rotation = Quaternion.Euler(lookXAngle, transform.rotation.eulerAngles.y, 0.0f);
+        saveData.playerData.timeLeft = timeLimit / maxTimeLimit;
+        saveData.playerData.flashlight = flashlightState;
     }
 
     private void OnGameLoaded(SaveData saveData)
@@ -119,6 +127,8 @@ public class EntityPlayer : Entity
         transform.position = saveData.playerData.position;
         transform.rotation = Quaternion.Euler(0.0f, saveData.playerData.rotation.eulerAngles.y, 0.0f);
         lookXAngle = saveData.playerData.rotation.eulerAngles.x;
+        timeLimit = maxTimeLimit * saveData.playerData.timeLeft;
+        flashlightState = saveData.playerData.flashlight;
     }
 
     protected override void Start()
@@ -135,6 +145,7 @@ public class EntityPlayer : Entity
         bool canCallHome = CanCallHome();
         HandleInput(activatable, canCallHome);
         HandleAnxiety();
+        DecreaseTimeLimit();
         HandleFlashLight();
         DecreaseEnergy();
         PerformEffects();
@@ -290,6 +301,14 @@ public class EntityPlayer : Entity
         }
         else
             flashlight.enabled = false;
+    }
+
+    private void DecreaseTimeLimit()
+    {
+        if (GameManager.GamePaused)
+            return; //Just don't.
+
+        timeLimit -= (1 + (anxiety / maxAnxiety) * anxietyTimeDecrease) * Time.deltaTime;
     }
 
     private void DecreaseEnergy()

@@ -5237,6 +5237,11 @@ Prefab:
       propertyPath: m_RootOrder
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 114738666737656568, guid: fda47d9282d1c8f4aa924672d40bed43,
+        type: 2}
+      propertyPath: playerBase
+      value: 
+      objectReference: {fileID: 783478683}
     - target: {fileID: 114988359862688982, guid: fda47d9282d1c8f4aa924672d40bed43,
         type: 2}
       propertyPath: worldHolder
@@ -5262,11 +5267,6 @@ Prefab:
       propertyPath: tube
       value: 
       objectReference: {fileID: 2094684193}
-    - target: {fileID: 114738666737656568, guid: fda47d9282d1c8f4aa924672d40bed43,
-        type: 2}
-      propertyPath: playerBase
-      value: 
-      objectReference: {fileID: 783478683}
     - target: {fileID: 224096113454553148, guid: fda47d9282d1c8f4aa924672d40bed43,
         type: 2}
       propertyPath: m_AnchorMin.y
