@@ -261,6 +261,7 @@ public class EntityPlayer : Entity
             if(homeCallTimer > HomeCallTime)
             {
                 playerBase.transform.position = new Vector3(transform.position.x, 0.01f, transform.position.z);
+                BaseController.Main.collectingState = BaseController.CollectingState.CollectingTaggedOres;
                 homeCallTimer = 0.0f;
             }
 
