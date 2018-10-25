@@ -10,7 +10,7 @@ public class WorldGenerator : MonoBehaviour
     private int mapSize;
 
     public ChunkHandler chunkHandler;
-    public GameObject floorPrefab, wallPrefab, orePrefab;
+    public GameObject floorPrefab, wallPrefab, ceilingPrefab, orePrefab, holePrefab;
     public Transform playerBase, player;
 
     public float scale = 1.0f;
@@ -25,6 +25,7 @@ public class WorldGenerator : MonoBehaviour
     public int minRoomSize = 3, maxRoomSize = 8;
     [Range(0, 1)] public float roomDoorwayChance = 0.35f;
     [Range(0, 1)] public float roomOreChance = 0.05f;
+    [Range(0, 1)] public float roomHoleChance = 0.01f;
 
     private void Awake()
     {
@@ -89,11 +90,13 @@ public class WorldGenerator : MonoBehaviour
             Vector2Int direction = new Vector2Int(0, 0);
 
             if (Random.value < 0.5f)
-                direction.x = (startPos.x < size * 0.5) ? 1 : -1;
+                direction.x = (origins[i].x < size * 0.5) ? 1 : -1;
             else
-                direction.y = (startPos.y < size * 0.5) ? 1 : -1;
+                direction.y = (origins[i].y < size * 0.5) ? 1 : -1;
 
-            queuedTiles.Enqueue(new QueuedTile(origins[i], direction));
+            Debug.Log($"{origins[i]} ~ ({origins[i].x + (origins[i].y * mapSize)})");
+            map[origins[i].x + (origins[i].y * mapSize)] = i == 0 ? MapTile.EmptyTile : MapTile.HoleTile;
+            queuedTiles.Enqueue(new QueuedTile(origins[i] + direction, direction));
         }
 
         while (queuedTiles.Count > 0)
@@ -116,7 +119,7 @@ public class WorldGenerator : MonoBehaviour
             {
                 Vector2Int pos = origins[i] + new Vector2Int((int)Mathf.Sign(difference.x) * x, 0);
                 int mapIndex = pos.x + (pos.y * mapSize);
-                if (mapIndex > 0 && mapIndex < map.Length)
+                if (mapIndex > 0 && mapIndex < map.Length && map[mapIndex] == MapTile.Void)
                     map[mapIndex] = MapTile.EmptyTile;
             }
 
@@ -124,7 +127,7 @@ public class WorldGenerator : MonoBehaviour
             {
                 Vector2Int pos = origins[(i + 1) % origins.Length] + new Vector2Int(0, (int)Mathf.Sign(difference.y) * -y);
                 int mapIndex = pos.x + (pos.y * mapSize);
-                if (mapIndex > 0 && mapIndex < map.Length)
+                if (mapIndex > 0 && mapIndex < map.Length && map[mapIndex] == MapTile.Void)
                     map[mapIndex] = MapTile.EmptyTile;
             }
         }
@@ -133,7 +136,7 @@ public class WorldGenerator : MonoBehaviour
     private void GeneratePath(Vector2Int pos, Vector2Int direction, ref Queue<QueuedTile> queuedTiles)
     {
         int i = pos.x + (pos.y * mapSize);
-        if (i < 0 || i >= map.Length || map[i] != 0)
+        if (i < 0 || i >= map.Length || map[i] != MapTile.Void)
             return;
 
         map[i] = MapTile.EmptyTile;
@@ -205,13 +208,15 @@ public class WorldGenerator : MonoBehaviour
 
                 int i = x + (y * mapSize);
 
-                if (i < map.Length && i > 0)
+                if (i < map.Length && i > 0 && map[i] == MapTile.Void)
                 {
                     map[i] = MapTile.EmptyTile;
 
                     if (!allEmpty)
                     {
-                        if (Random.value < roomOreChance)
+                        if (Random.value < roomHoleChance)
+                            map[i] = MapTile.HoleTile;
+                        else if (Random.value < roomOreChance)
                             map[i] = MapTile.OreTile;
                     }
                 }
@@ -267,10 +272,12 @@ public class WorldGenerator : MonoBehaviour
                 if (mapTile != MapTile.Void)
                 {
                     Vector3 worldPosition = new Vector3(x, 0, y) * scale;
-                    GameObject floorObject = Instantiate(floorPrefab, worldPosition, Quaternion.identity);
+                    GameObject floorObject = Instantiate(floorPrefab, worldPosition, floorPrefab.transform.rotation);
+                    GameObject ceilingObject = Instantiate(ceilingPrefab, worldPosition + Vector3.up * scale, ceilingPrefab.transform.rotation);
                     if (!chunks.ContainsKey(chunk))
                         chunks.Add(chunk, new Chunk());
                     chunks[chunk].meshFilters.AddRange(floorObject.GetComponentsInChildren<MeshFilter>());
+                    chunks[chunk].meshFilters.AddRange(ceilingObject.GetComponentsInChildren<MeshFilter>());
                     PlaceWalls(x, y, chunks[chunk]);
 
                     byte tileSaveData = 0;
@@ -346,6 +353,15 @@ public class WorldGenerator : MonoBehaviour
                 worldGenObject.OnWorldLoaded(saveData);
             }
         }
+        else if(mapTile == MapTile.HoleTile)
+        {
+            Vector3 position = new Vector3(
+                pos.x * scale,
+                holePrefab.transform.position.y,
+                pos.y * scale
+                );
+            Instantiate(holePrefab, position, randomRotation);
+        }
     }
 
     private void CombineMeshes(Chunk chunk, Vector2Int pos, Transform chunkHolder)
@@ -409,5 +425,6 @@ public class WorldGenerator : MonoBehaviour
         EmptyTile,
         BaseReserved,
         OreTile,
+        HoleTile,
     }
 }

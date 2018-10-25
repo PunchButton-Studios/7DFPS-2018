@@ -145,7 +145,10 @@ MonoBehaviour:
   floorPrefab: {fileID: 1157777765871200, guid: ff609abd6541caa4ab9a8ed2e4b6808c,
     type: 2}
   wallPrefab: {fileID: 1834433071460162, guid: 9cf4c551761acff4c926910b4b25cdbe, type: 2}
+  ceilingPrefab: {fileID: 1668287740386706, guid: a9e44014fc0afbc42914e43347b8dcb6,
+    type: 2}
   orePrefab: {fileID: 1728397799800160, guid: 8dc531848576f3446a014579b3c518ae, type: 2}
+  holePrefab: {fileID: 1010898553539716, guid: 39cc5c1495aba5e4dbd82f56219f151f, type: 2}
   playerBase: {fileID: 783478683}
   player: {fileID: 139988725}
   scale: 5
@@ -160,6 +163,7 @@ MonoBehaviour:
   maxRoomSize: 8
   roomDoorwayChance: 0.6
   roomOreChance: 0.05
+  roomHoleChance: 0.001
 --- !u!4 &90386273
 Transform:
   m_ObjectHideFlags: 0
