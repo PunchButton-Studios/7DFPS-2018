@@ -24,10 +24,16 @@ public class PlayerGUI : MonoBehaviour
     public GameObject activatePrompt, callHomePrompt;
 
     public GameObject loadScreen;
+    private bool loadScreenUsed = false;
 
     private void Update()
     {
+        if (loadScreenUsed)
+            return;
+
         loadScreen.SetActive(GameManager.isLoading);
+        if (!GameManager.isLoading)
+            loadScreenUsed = true;
     }
 
     public void UpdateGUI(Activatable targetActivatable, bool canCallHome, EntityPlayer player)

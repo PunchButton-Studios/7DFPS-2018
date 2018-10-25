@@ -22,7 +22,8 @@ GameObject:
   - component: {fileID: 33844188098418500}
   - component: {fileID: 23463919955890012}
   - component: {fileID: 136207438251667102}
-  m_Layer: 0
+  - component: {fileID: 114360353585224334}
+  m_Layer: 12
   m_Name: Hole
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -84,6 +85,18 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1010898553539716}
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &114360353585224334
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1010898553539716}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26b95e9f5ec8f1c42ab83bd188b6f5ef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  activationTime: 1
 --- !u!136 &136207438251667102
 CapsuleCollider:
   m_ObjectHideFlags: 1
@@ -96,4 +109,4 @@ CapsuleCollider:
   m_Radius: 0.5000001
   m_Height: 2
   m_Direction: 1
-  m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
+  m_Center: {x: 0.000000059604645, y: 2, z: -0.00000008940697}

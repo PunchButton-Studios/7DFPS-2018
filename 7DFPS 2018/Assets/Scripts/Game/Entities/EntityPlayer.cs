@@ -192,6 +192,8 @@ public class EntityPlayer : Entity
         rotationChange = Mathf.Abs(mouseX) + Mathf.Abs(lookXAngle - oldLookXAngle);
     }
 
+    public void ResetCameraXAngle() => lookXAngle = 0;
+
     private void Fall()
     {
         if (controller.isGrounded)

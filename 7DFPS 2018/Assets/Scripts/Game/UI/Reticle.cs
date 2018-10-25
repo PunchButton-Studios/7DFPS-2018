@@ -14,7 +14,7 @@ public class Reticle : MonoBehaviour
 
     private void Update()
     {
-        transition = Mathf.Clamp01(transition + transitionSpeed * Time.deltaTime * (active ? -1 : 1));
+        transition = Mathf.Clamp01(transition + transitionSpeed * Time.unscaledDeltaTime * (active ? -1 : 1));
         
         for(int i = 0; i < reticleParts.Length; i++)
         {
@@ -22,7 +22,7 @@ public class Reticle : MonoBehaviour
             reticleParts[i].localRotation = Quaternion.Euler(0, 0, zRotation);
         }
 
-        transform.Rotate(0, 0, rotation * Time.deltaTime * (1 - transition));
+        transform.Rotate(0, 0, rotation * Time.unscaledDeltaTime * (1 - transition));
         transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.identity, transition * resetSpeed * Time.deltaTime);
     }
 }

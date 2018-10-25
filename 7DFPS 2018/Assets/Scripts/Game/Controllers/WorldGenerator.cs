@@ -27,6 +27,8 @@ public class WorldGenerator : MonoBehaviour
     [Range(0, 1)] public float roomOreChance = 0.05f;
     [Range(0, 1)] public float roomHoleChance = 0.01f;
 
+    public event WorldgenComplete worldGenCompleteEvent;
+
     private void Awake()
     {
         GameManager.Main.saveGameEvent += OnSaveGame;
@@ -299,6 +301,7 @@ public class WorldGenerator : MonoBehaviour
 
         GameManager.isLoading = false;
         Time.timeScale = 1.0f;
+        worldGenCompleteEvent?.Invoke();
     }
 
     private void PlaceWalls(int x, int y, Chunk chunk)
@@ -360,7 +363,9 @@ public class WorldGenerator : MonoBehaviour
                 holePrefab.transform.position.y,
                 pos.y * scale
                 );
-            Instantiate(holePrefab, position, randomRotation);
+            GameObject holeObject = Instantiate(holePrefab, position, randomRotation);
+            holeObject.transform.parent = chunkHandler.transform;
+            holeObject.GetComponent<ActivatableHole>().tilePos = pos;
         }
     }
 

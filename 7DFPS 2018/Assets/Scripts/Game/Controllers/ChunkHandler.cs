@@ -22,4 +22,12 @@ public class ChunkHandler : MonoBehaviour
         yield return new WaitForEndOfFrame();
         StartCoroutine(UpdateChunkRendering());
     }
+
+    public void DestroyChildren()
+    {
+        int childCount = transform.childCount;
+        for(int i = 0; i < childCount; i++)
+            Destroy(transform.GetChild(i).gameObject);
+        chunkRenderers.Clear();
+    }
 }
