@@ -6,6 +6,7 @@ public class ActivatableOre : Activatable, IWorldGenObject
 {
     public string activateText = "Tag Cobalt Ore";
     public GameObject tagObjectPrefab;
+    public AudioSource tagSfx;
     private bool tagged;
 
     public int ore = 5;
@@ -41,6 +42,7 @@ public class ActivatableOre : Activatable, IWorldGenObject
     {
         Tag();
         BaseController.Main.taggedOre += ore;
+        tagSfx.Play();
     }
 
     private void Tag()
