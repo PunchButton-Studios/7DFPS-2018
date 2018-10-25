@@ -100,6 +100,7 @@ public class SaveData
         public int mapSize = 0;
         public int kobolds = 0;
         public float koboldTimer = 0.0f;
+        public uint depth = 0;
 
         public void SaveExtraData(IWorldGenObject worldGenObject, byte data)
         {

@@ -6,6 +6,7 @@ public class PlayerDepthTransition : MonoBehaviour
 {
     public EntityPlayer entityPlayer;
     public CharacterController characterController;
+    public PlayerGUI playerGUI;
     public Transform playerHead, worldHolder, playerBase;
     public ChunkHandler chunkHandler;
     public WorldGenerator worldGenerator;
@@ -29,6 +30,7 @@ public class PlayerDepthTransition : MonoBehaviour
     public float yOffsetWorldOnWorldgen = 100.0f;
 
     private Vector2Int wgStartPos;
+    public bool falling = false;
 
     private void Reset()
     {
@@ -54,7 +56,7 @@ public class PlayerDepthTransition : MonoBehaviour
 
     public void UpdateUI()
     {
-        FindObjectOfType<PlayerGUI>().UpdateGUI(null, false, entityPlayer);
+        playerGUI.UpdateGUI(null, false, entityPlayer);
         cameraRotateSfx.volume = 0.0f;
     }
 
@@ -78,6 +80,7 @@ public class PlayerDepthTransition : MonoBehaviour
     {
         worldGenerator.worldGenCompleteEvent -= OnWorldGenComplete;
         animator.SetTrigger(endTrigger);
+        GameManager.Main.depth++;
     }
 
     public void DetachTube()
@@ -98,6 +101,9 @@ public class PlayerDepthTransition : MonoBehaviour
     {
         if (!active)
             return;
+
+        if(falling)
+            playerGUI.ScrollDepthMeter();
 
         playerHead.rotation = Quaternion.RotateTowards(
             playerHead.rotation,

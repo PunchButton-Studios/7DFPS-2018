@@ -6,6 +6,7 @@ public class GameManager : MonoBehaviour
     private bool isPaused = false;
     private ICloseableMenu activeMenu;
     private float oldTimescale = 1.0f;
+    public uint depth = 0;
 
     public static string saveName = "New Save";
     public static StartState startState = StartState.NewGame;
@@ -111,6 +112,7 @@ public class GameManager : MonoBehaviour
         if (!directoryInfo.Exists)
             directoryInfo.Create();
         saveGameEvent?.Invoke(saveData);
+        saveData.worldData.depth = depth;
         saveData.Save(directoryInfo);
     }
 
@@ -121,6 +123,7 @@ public class GameManager : MonoBehaviour
             DirectoryInfo directoryInfo = new DirectoryInfo($@"{Application.persistentDataPath}\saves\{saveName}");
             SaveData saveData = SaveData.Load(directoryInfo);
             loadGameEvent?.Invoke(saveData);
+            depth = saveData.worldData.depth;
         }
         catch(System.Exception ex)
         {

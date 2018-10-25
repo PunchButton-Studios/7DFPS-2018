@@ -19,6 +19,10 @@ public class PlayerGUI : MonoBehaviour
 
     public Image timerBarImage;
 
+    public RawImage depthMeterImage;
+    public Text depthMeterText;
+    public float depthMeterSpeed = 5;
+
     public Gradient progressCircleColorGradient;
 
     public Text oreResourceCountText;
@@ -30,6 +34,8 @@ public class PlayerGUI : MonoBehaviour
 
     private void Update()
     {
+        depthMeterText.text = $"-{(GameManager.Main.depth + 1) * 100}m";
+
         if (loadScreenUsed)
             return;
 
@@ -115,5 +121,13 @@ public class PlayerGUI : MonoBehaviour
         float progress = time / maxTime;
         timerBarImage.fillAmount = progress;
         timerBarImage.color = progressCircleColorGradient.Evaluate(progress);
+    }
+
+    public void ScrollDepthMeter()
+    {
+        Rect uvRect = depthMeterImage.uvRect;
+        uvRect.y += depthMeterSpeed * Time.unscaledDeltaTime;
+        depthMeterImage.uvRect = uvRect;
+        depthMeterText.text = $"-{Random.Range(100, 999)}m";
     }
 }
