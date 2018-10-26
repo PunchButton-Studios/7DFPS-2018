@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae9258b845087ee4192abf1832360c1f, type: 3}
+  m_Name: Chandelier
+  m_EditorClassIdentifier: 
+  prefab: {fileID: 1824587144983820, guid: 5ef64a81afb2fef4ba3d92a5b55caa8b, type: 2}
+  isWallObject: 0
+  preview: {fileID: 21300000, guid: e2167e1ca8fc4684f9ce0208a468e10e, type: 3}
+  oreCost: 35

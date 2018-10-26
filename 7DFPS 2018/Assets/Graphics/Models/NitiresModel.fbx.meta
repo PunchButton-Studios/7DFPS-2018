@@ -1,0 +1,229 @@
+fileFormatVersion: 2
+guid: c543f7ee458deab4dbb4dd8618c9ac79
+ModelImporter:
+  serializedVersion: 23
+  fileIDToRecycleName:
+    100000: Cloack_1_L
+    100002: Cloack_1_R
+    100004: Cloack_2_L
+    100006: Cloack_2_R
+    100008: Cloack_3_L
+    100010: Cloack_3_R
+    100012: Cloack_4_L
+    100014: Cloack_4_R
+    100016: Cloack_5_L
+    100018: Cloack_5_R
+    100020: Cloack_6_L
+    100022: Cloack_6_R
+    100024: Cloack_7_L
+    100026: Cloack_7_R
+    100028: CloackEnd_L
+    100030: CloackEnd_R
+    100032: CollarBone_L
+    100034: CollarBone_R
+    100036: Head
+    100038: HeadEnd
+    100040: Hip
+    100042: LowerArm_L
+    100044: LowerArm_R
+    100046: NitiresModel
+    100048: //RootNode
+    100050: Rig
+    100052: RobeEnd
+    100054: RobeFront_1
+    100056: RobeFront_2
+    100058: RobeMiddle_1_L
+    100060: RobeMiddle_1_R
+    100062: RobeMiddle_2_L
+    100064: RobeMiddle_2_R
+    100066: RobeMiddleEnd_L
+    100068: RobeMiddleEnd_R
+    100070: RobeRear_1
+    100072: RobeRear_2
+    100074: RobeRearEnd
+    100076: Sleeve_1_L
+    100078: Sleeve_1_R
+    100080: Sleeve_2_L
+    100082: Sleeve_2_R
+    100084: SleeveEnd_L
+    100086: SleeveEnd_R
+    100088: Spine1
+    100090: Spine2
+    100092: Spine3
+    100094: Tail_1
+    100096: Tail_2
+    100098: Tail_3
+    100100: Tail_4
+    100102: Tail_5
+    100104: Tail_6
+    100106: Tail_7
+    100108: TailBase
+    100110: TailEnd
+    100112: UpperArm_L
+    100114: UpperArm_R
+    100116: UpperCloack_1_L
+    100118: UpperCloack_1_R
+    100120: UpperCloack_2_L
+    100122: UpperCloack_2_R
+    100124: UpperCloack_3_L
+    100126: UpperCloack_3_R
+    100128: UpperCloack_4_L
+    100130: UpperCloack_4_R
+    100132: UpperCloackEnd_L
+    100134: UpperCloackEnd_R
+    400000: Cloack_1_L
+    400002: Cloack_1_R
+    400004: Cloack_2_L
+    400006: Cloack_2_R
+    400008: Cloack_3_L
+    400010: Cloack_3_R
+    400012: Cloack_4_L
+    400014: Cloack_4_R
+    400016: Cloack_5_L
+    400018: Cloack_5_R
+    400020: Cloack_6_L
+    400022: Cloack_6_R
+    400024: Cloack_7_L
+    400026: Cloack_7_R
+    400028: CloackEnd_L
+    400030: CloackEnd_R
+    400032: CollarBone_L
+    400034: CollarBone_R
+    400036: Head
+    400038: HeadEnd
+    400040: Hip
+    400042: LowerArm_L
+    400044: LowerArm_R
+    400046: //RootNode
+    400048: NitiresModel
+    400050: Rig
+    400052: RobeEnd
+    400054: RobeFront_1
+    400056: RobeFront_2
+    400058: RobeMiddle_1_L
+    400060: RobeMiddle_1_R
+    400062: RobeMiddle_2_L
+    400064: RobeMiddle_2_R
+    400066: RobeMiddleEnd_L
+    400068: RobeMiddleEnd_R
+    400070: RobeRear_1
+    400072: RobeRear_2
+    400074: RobeRearEnd
+    400076: Sleeve_1_L
+    400078: Sleeve_1_R
+    400080: Sleeve_2_L
+    400082: Sleeve_2_R
+    400084: SleeveEnd_L
+    400086: SleeveEnd_R
+    400088: Spine1
+    400090: Spine2
+    400092: Spine3
+    400094: Tail_1
+    400096: Tail_2
+    400098: Tail_3
+    400100: Tail_4
+    400102: Tail_5
+    400104: Tail_6
+    400106: Tail_7
+    400108: TailBase
+    400110: TailEnd
+    400112: UpperArm_L
+    400114: UpperArm_R
+    400116: UpperCloack_1_L
+    400118: UpperCloack_1_R
+    400120: UpperCloack_2_L
+    400122: UpperCloack_2_R
+    400124: UpperCloack_3_L
+    400126: UpperCloack_3_R
+    400128: UpperCloack_4_L
+    400130: UpperCloack_4_R
+    400132: UpperCloackEnd_L
+    400134: UpperCloackEnd_R
+    2100000: wizardMat
+    4300000: NitiresModel
+    7400000: Take 001
+    9500000: //RootNode
+    13700000: NitiresModel
+  externalObjects: {}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 7
+    meshCompression: 0
+    addColliders: 0
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+    previousCalculatedGlobalScale: 0.099999994
+    hasPreviousCalculatedGlobalScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
