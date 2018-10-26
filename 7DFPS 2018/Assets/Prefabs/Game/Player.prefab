@@ -2867,6 +2867,7 @@ MonoBehaviour:
   maxKobolds: 10
   minInterval: 60
   maxInterval: 260
+  timer: 0
   minRange: 10
   maxRange: 30
 --- !u!114 &114369961611593796
@@ -3723,7 +3724,8 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  homeCallTimeMultiplier: 0.0025
+  homeCallTimeMultiplier: 0.0035
+  homeCallKoboldTimerDecrease: 0.3
   viewRange: 50
   viewAngle: 50
   cameraController: {fileID: 114930843393507064}

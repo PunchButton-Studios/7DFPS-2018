@@ -67,6 +67,7 @@ public class EntityPlayer : Entity
     public float homeCallTimerIdleDecrease = 2.0f;
     public AnimationCurve homeCallTimePerDistance;
     public float homeCallTimeMultiplier = 0.25f;
+    public float homeCallKoboldTimerDecrease = 0.5f;
 
     [Header("View")]
     public float viewRange = 50.0f;
@@ -262,6 +263,7 @@ public class EntityPlayer : Entity
         if (InputHandler.GetButton(InputHandler.Input.CallHome) && canCallHome)
         {
             homeCallTimer += Time.deltaTime;
+            KoboldSpawner.Main.timer -= homeCallKoboldTimerDecrease * Time.deltaTime;
 
             if(homeCallTimer > HomeCallTime)
             {

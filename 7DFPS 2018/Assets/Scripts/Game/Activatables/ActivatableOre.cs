@@ -10,6 +10,7 @@ public class ActivatableOre : Activatable, IWorldGenObject
     private bool tagged;
 
     public int ore = 5;
+    public float koboldSpawnDecrease = 1.0f;
 
     public override string ActivateInfo
     {
@@ -43,6 +44,7 @@ public class ActivatableOre : Activatable, IWorldGenObject
         Tag();
         BaseController.Main.taggedOre += ore;
         tagSfx.Play();
+        KoboldSpawner.Main.timer -= koboldSpawnDecrease;
     }
 
     private void Tag()

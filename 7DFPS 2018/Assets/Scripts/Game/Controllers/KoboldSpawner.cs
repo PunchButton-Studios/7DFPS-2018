@@ -8,8 +8,14 @@ public class KoboldSpawner : MonoBehaviour
     public GameObject koboldPrefab;
     public int maxKobolds = 10;
     public float minInterval = 60.0f, maxInterval = 260.0f;
-    private float timer = 0.0f;
+    public float timer = 0.0f;
     public float minRange = 10.0f, maxRange = 30.0f;
+
+    public static KoboldSpawner Main
+    {
+        get;
+        private set;
+    }
 
     public int KoboldCount
     {
@@ -22,6 +28,7 @@ public class KoboldSpawner : MonoBehaviour
 
     private void Awake()
     {
+        Main = this;
         timer = Random.Range(minInterval, maxInterval);
         GameManager.Main.saveGameEvent += OnSaveGame;
         GameManager.Main.loadGameEvent += OnLoadGame;
