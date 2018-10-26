@@ -328,9 +328,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1696005293798218}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c3ce7491c75c1c041a67fc353e963d7b, type: 3}
+  m_Script: {fileID: 11500000, guid: e7bdaffd3bdda5d4d91b55d7afc0a887, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  baseObject: {fileID: 0}
+  alreadyInSlot: 0
   oreCost: {fileID: 1176550513946040}
   oreCostText: {fileID: 114223808648587810}
   previewImage: {fileID: 114708619985161492}
