@@ -75,11 +75,16 @@ public class EntityPlayer : Entity
     [Header("Effects")]
     public CameraController cameraController;
     public AudioController jointAudio, impactAudio, flashlightAudio, batteryAudio;
-    public AudioSource rotateAudio;
+    public AudioSource rotateAudio, criticalAnxietySfx;
+    public MusicHandler heartbeatSfx;
     public float jointVolumeIncreaseSpeed = 0.1f, jointVolumeDecreaseSpeed = 0.25f;
     public float rotateVolumeEffect = 1.0f, rotatePitchEffect = 1.0f;
     public float rotateMaxVolume = 1.0f, rotateMaxPitch = 2.0f, rotateMinPitch = 0.5f;
     public float rotateVolumeLerpSpeed = 0.8f, rotatePitchLerpSpeed = 0.8f;
+    public float anxietyCriticalSpeed = 0.1f;
+    [Range(0, 1)] public float anxietyCriticalPoint = 0.9f, anxietyCriticalMaxVolume = 0.5f;
+    public AnimationCurve anxietyFieldOfViewCurve;
+    public AnimationCurve anxietyCameraShakeCurve;
 
     private bool playedBatteryAlarm = false;
 
@@ -382,6 +387,12 @@ public class EntityPlayer : Entity
             rotationChange = 0.0f;
         rotateAudio.volume = Mathf.Clamp(Mathf.Lerp(rotateAudio.volume, rotationChange / rotateVolumeEffect, rotateVolumeLerpSpeed), 0, rotateMaxVolume);
         rotateAudio.pitch = Mathf.Clamp(Mathf.Lerp(rotateAudio.pitch, rotationChange / rotatePitchEffect + rotateMinPitch, rotatePitchLerpSpeed), rotateMinPitch, rotateMaxPitch);
+
+        float anxietyPercentage = anxiety / maxAnxiety;
+        heartbeatSfx.Play((int)Mathf.Floor(anxietyPercentage * 4));
+        criticalAnxietySfx.volume = Mathf.MoveTowards(criticalAnxietySfx.volume, anxietyPercentage > anxietyCriticalPoint ? anxietyCriticalMaxVolume : 0, anxietyCriticalSpeed * Time.deltaTime);
+        cameraController.FOV = anxietyFieldOfViewCurve.Evaluate(anxietyPercentage);
+        cameraController.Shake(anxietyCameraShakeCurve.Evaluate(anxietyPercentage));
     }
 
     private void OnDrawGizmosSelected()

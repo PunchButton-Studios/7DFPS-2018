@@ -15,6 +15,7 @@ public class KoboldSpawner : MonoBehaviour
     {
         get
         {
+            koboldList.RemoveAll((k) => k == null);
             return koboldList.Count;
         }
     }

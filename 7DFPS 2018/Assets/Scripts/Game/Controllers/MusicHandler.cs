@@ -33,9 +33,13 @@ public class MusicHandler : MonoBehaviour
         PlayNext();
     }
 
-    public void PlayNext()
+    public void PlayNext() => Play((lastClip + 1) % clips.Length);
+
+    public void Play(int id)
     {
-        lastClip = (lastClip + 1) % clips.Length;
+        if (id == lastClip)
+            return;
+        lastClip = id;
         lastSource = (lastSource + 1) % sources.Length;
 
         sources[lastSource].clip = clips[lastClip];
