@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ActivatableOre : Activatable, IWorldGenObject
+public class ActivatableOre : Activatable, IWorldGenObject, ISonarResponder
 {
     public string activateText = "Tag Cobalt Ore";
     public GameObject tagObjectPrefab;
-    public AudioSource tagSfx;
+    public AudioSource tagSfx, sonarSfx;
     private bool tagged;
 
     public int ore = 5;
@@ -17,6 +17,14 @@ public class ActivatableOre : Activatable, IWorldGenObject
         get
         {
             return activateText;
+        }
+    }
+
+    public AudioSource SonarResponseSource
+    {
+        get
+        {
+            return tagged ? null : sonarSfx;
         }
     }
 

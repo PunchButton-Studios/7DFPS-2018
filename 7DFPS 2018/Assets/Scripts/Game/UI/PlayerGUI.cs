@@ -19,6 +19,8 @@ public class PlayerGUI : MonoBehaviour
 
     public Image timerBarImage;
 
+    public Image sonarImage, sonarBarImage;
+
     public RawImage depthMeterImage;
     public Text depthMeterText;
     public float depthMeterSpeed = 5;
@@ -27,7 +29,7 @@ public class PlayerGUI : MonoBehaviour
 
     public Text oreResourceCountText;
 
-    public GameObject activatePrompt, callHomePrompt, flashlightPrompt;
+    public GameObject activatePrompt, callHomePrompt, flashlightPrompt, sonarPrompt;
 
     public GameObject loadScreen;
     private bool loadScreenUsed = false;
@@ -65,8 +67,9 @@ public class PlayerGUI : MonoBehaviour
         UpdateAnxiety(player.anxiety, player.maxAnxiety);
         UpdateBattery(player.energy, player.isCharging);
         UpdateTimer(player.timeLimit, player.maxTimeLimit);
+        UpdateSonarInfo(player.hasSonar, player.sonarCooldown, player.sonarCooldownMax);
         UpdateResourceList();
-        UpdatePrompts(targetActivatable != null, canCallHome, player.enabled);
+        UpdatePrompts(targetActivatable != null, canCallHome, player.enabled, player.hasSonar);
     }
 
     private void UpdateAnxiety(float anxiety, float maxAnxiety)
@@ -109,11 +112,12 @@ public class PlayerGUI : MonoBehaviour
         oreResourceCountText.text = BaseController.Main.ore.ToString() + (BaseController.Main.retrievingOre > 0 ? $" +{BaseController.Main.retrievingOre.ToString()}" : string.Empty);
     }
 
-    private void UpdatePrompts(bool hasTargetActivatable, bool canCallHome, bool playerControlEnabled)
+    private void UpdatePrompts(bool hasTargetActivatable, bool canCallHome, bool playerControlEnabled, bool sonarEnabled)
     {
         activatePrompt.SetActive(hasTargetActivatable && playerControlEnabled);
         callHomePrompt.SetActive(canCallHome && playerControlEnabled);
         flashlightPrompt.SetActive(playerControlEnabled);
+        sonarPrompt.SetActive(sonarEnabled && playerControlEnabled);
     }
 
     private void UpdateTimer(float time, float maxTime)
@@ -121,6 +125,18 @@ public class PlayerGUI : MonoBehaviour
         float progress = time / maxTime;
         timerBarImage.fillAmount = progress;
         timerBarImage.color = progressCircleColorGradient.Evaluate(progress);
+    }
+
+    private void UpdateSonarInfo(bool hasSonar, float sonarCooldown, float sonarCooldownMax)
+    {
+        sonarImage.enabled = hasSonar;
+        sonarBarImage.enabled = hasSonar;
+
+        float progress = sonarCooldown / sonarCooldownMax;
+        progress = Mathf.Clamp01(progress);
+        sonarBarImage.fillAmount = progress;
+        sonarBarImage.color = progressCircleColorGradient.Evaluate(1 - progress);
+        sonarImage.color = callHomeColors[sonarCooldown < 0.0f ? 1 : 0];
     }
 
     public void ScrollDepthMeter()

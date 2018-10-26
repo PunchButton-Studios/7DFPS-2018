@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EntityKobold : Entity
+public class EntityKobold : Entity, ISonarResponder
 {
     public State state = State.Idle;
 
@@ -28,8 +28,17 @@ public class EntityKobold : Entity
     [Header("SFX")]
     public AudioController idleSfxAudio;
     public AudioController activeSfxAudio, fleeSfxAudio;
+    public AudioSource sonarResponseSfx;
     public float idleSfxMinInterval = 30, idleSfxMaxInterval = 90;
     private float nextIdleSfx;
+
+    public AudioSource SonarResponseSource
+    {
+        get
+        {
+            return sonarResponseSfx;
+        }
+    }
 
     protected override void Start()
     {

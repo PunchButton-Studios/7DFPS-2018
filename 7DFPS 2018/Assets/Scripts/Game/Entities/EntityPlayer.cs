@@ -69,6 +69,17 @@ public class EntityPlayer : Entity
     public float homeCallTimeMultiplier = 0.25f;
     public float homeCallKoboldTimerDecrease = 0.5f;
 
+    [Header("Sonar")]
+    public bool hasSonar = false;
+    public float sonarKoboldTimerDecrease = 1.2f;
+    public float sonarCooldown = 0.0f;
+    public float sonarCooldownMax = 5.0f;
+    public float sonarRange = 100;
+    public float sonarDelayPerDistance = 0.1f;
+    public LayerMask sonarMask;
+    public AudioSource sonarSfx;
+    private List<SonarResponse> sonarResponses = new List<SonarResponse>();
+
     [Header("View")]
     public float viewRange = 50.0f;
     public float viewAngle = 60.0f;
@@ -170,6 +181,7 @@ public class EntityPlayer : Entity
             Move();
             Action(activatable);
             ToggleFlashlight();
+            UseSonar();
         }
         else
             isMoving = false;
@@ -281,6 +293,35 @@ public class EntityPlayer : Entity
                 homeCallTimer = 0.0f;
             return false;
         }
+    }
+
+    private void UseSonar()
+    {
+        sonarCooldown -= Time.deltaTime;
+        if(hasSonar && InputHandler.GetButtonDown(InputHandler.Input.Sonar) && sonarCooldown < 0.0f)
+        {
+            sonarSfx.Play();
+            sonarCooldown = sonarCooldownMax;
+            KoboldSpawner.Main.timer -= sonarKoboldTimerDecrease;
+            Collider[] colliders = Physics.OverlapSphere(transform.position, sonarRange, sonarMask);
+            foreach(Collider collider in colliders)
+            {
+                ISonarResponder sonarResponder = collider.GetComponent<ISonarResponder>();
+                if (sonarResponder != null && sonarResponder.SonarResponseSource != null)
+                {
+                    float delay = Vector3.Distance(transform.position, collider.transform.position) * sonarDelayPerDistance;
+                    sonarResponses.Add(new SonarResponse(sonarResponder.SonarResponseSource, delay));
+                }
+            }
+        }
+
+        foreach (SonarResponse sonarResponse in sonarResponses)
+        {
+            sonarResponse.delay -= Time.deltaTime;
+            if(sonarResponse.delay < 0.0f)
+                sonarResponse.responseSource.Play();
+        }
+        sonarResponses.RemoveAll((sr) => sr.delay < 0.0f);
     }
 
     private void ToggleFlashlight()
@@ -415,5 +456,17 @@ public class EntityPlayer : Entity
         Gizmos.DrawRay(transform.position, transform.forward * viewRange);
         Gizmos.DrawRay(transform.position, (Quaternion.Euler(0, viewAngle, 0) * transform.forward).normalized * viewRange);
         Gizmos.DrawRay(transform.position, (Quaternion.Euler(0, -viewAngle, 0) * transform.forward).normalized * viewRange);
+    }
+
+    private class SonarResponse
+    {
+        public AudioSource responseSource;
+        public float delay;
+
+        public SonarResponse(AudioSource responseSource, float delay)
+        {
+            this.responseSource = responseSource;
+            this.delay = delay;
+        }
     }
 }

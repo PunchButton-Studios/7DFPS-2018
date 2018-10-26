@@ -32,6 +32,8 @@ public static class InputHandler
                 return new KeyCode[] { keybinds.pause };
             case Input.CallHome:
                 return new KeyCode[] { keybinds.callHome };
+            case Input.Sonar:
+                return new KeyCode[] { keybinds.sonar };
             default:
                 return null;
         }
@@ -45,5 +47,6 @@ public static class InputHandler
         Flashlight,
         Pause,
         CallHome,
+        Sonar,
     }
 }

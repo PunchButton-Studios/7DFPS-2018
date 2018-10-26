@@ -50,5 +50,6 @@ public class Config
         public KeyCode flashlight = KeyCode.F;
         public KeyCode pause = KeyCode.Escape;
         public KeyCode callHome = KeyCode.H;
+        public KeyCode sonar = KeyCode.G;
     }
 }
