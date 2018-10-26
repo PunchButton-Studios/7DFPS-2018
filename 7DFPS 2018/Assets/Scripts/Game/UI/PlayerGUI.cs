@@ -24,6 +24,10 @@ public class PlayerGUI : MonoBehaviour
 
     public Image sonarImage, sonarBarImage;
 
+    public GameObject compassImageObject;
+    public RawImage compassImage;
+    public float compassXUVOffset = 0.125f;
+
     public RawImage depthMeterImage;
     public Text depthMeterText;
     public float depthMeterSpeed = 5;
@@ -40,6 +44,12 @@ public class PlayerGUI : MonoBehaviour
     private void Update()
     {
         depthMeterText.text = $"-{(GameManager.Main.depth + 1) * 100}m";
+
+        if (GameManager.GamePaused)
+        {
+            EntityPlayer player = FindObjectOfType<EntityPlayer>();
+            UpdateCompass(player.hasCompass, player.transform.rotation.eulerAngles.y);
+        }
 
         if (loadScreenUsed)
             return;
@@ -71,6 +81,7 @@ public class PlayerGUI : MonoBehaviour
         UpdateBattery(player.energy, player.isCharging);
         UpdateTimer(player.timeLimit, player.maxTimeLimit);
         UpdateSonarInfo(player.hasSonar, player.sonarCooldown, player.sonarCooldownMax);
+        UpdateCompass(player.hasCompass, player.transform.rotation.eulerAngles.y);
         UpdateResourceList();
         UpdatePrompts(targetActivatable != null, canCallHome, player.enabled, player.hasSonar);
     }
@@ -144,6 +155,18 @@ public class PlayerGUI : MonoBehaviour
         sonarBarImage.fillAmount = progress;
         sonarBarImage.color = progressCircleColorGradient.Evaluate(1 - progress);
         sonarImage.color = callHomeColors[sonarCooldown < 0.0f ? 1 : 0];
+    }
+
+    private void UpdateCompass(bool hasCompass, float playerYAngle)
+    {
+        compassImageObject.SetActive(hasCompass);
+        if (!hasCompass)
+            return;
+
+        float anglePercentage = playerYAngle / 360.0f;
+        Rect uvRect = compassImage.uvRect;
+        uvRect.x = anglePercentage + compassXUVOffset;
+        compassImage.uvRect = uvRect;
     }
 
     public void ScrollDepthMeter()

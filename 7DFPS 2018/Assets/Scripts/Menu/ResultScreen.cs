@@ -12,7 +12,7 @@ public class ResultScreen : MonoBehaviour
 
     private void Awake()
     {
-        depthText.text = $"-{(depth + 1) * 100} m";
+        depthText.text = $"{(depth + 1) * 100} m";
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
     }

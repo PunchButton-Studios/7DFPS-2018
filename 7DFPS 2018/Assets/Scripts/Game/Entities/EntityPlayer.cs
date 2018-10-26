@@ -74,6 +74,7 @@ public class EntityPlayer : Entity
 
     [Header("Sonar")]
     public bool hasSonar = false;
+    public float sonarEnergyCost = 0.01f;
     public float sonarKoboldTimerDecrease = 1.2f;
     public float sonarCooldown = 0.0f;
     public float sonarCooldownMax = 5.0f;
@@ -82,6 +83,9 @@ public class EntityPlayer : Entity
     public LayerMask sonarMask;
     public AudioSource sonarSfx;
     private List<SonarResponse> sonarResponses = new List<SonarResponse>();
+
+    [Header("Compass")]
+    public bool hasCompass = false;
 
     [Header("View")]
     public float viewRange = 50.0f;
@@ -305,6 +309,7 @@ public class EntityPlayer : Entity
         {
             sonarSfx.Play();
             sonarCooldown = sonarCooldownMax;
+            energy -= sonarEnergyCost;
             KoboldSpawner.Main.timer -= sonarKoboldTimerDecrease;
             Collider[] colliders = Physics.OverlapSphere(transform.position, sonarRange, sonarMask);
             foreach(Collider collider in colliders)

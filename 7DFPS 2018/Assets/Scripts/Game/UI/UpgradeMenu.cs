@@ -8,8 +8,8 @@ public class UpgradeMenu : MonoBehaviour, ICloseableMenu
     public Button createButton;
     public EntityPlayer entityPlayer;
 
-    public Button sonarUpgrade;
-    public int sonarCost;
+    public Button sonarUpgrade, compassUpgrade;
+    public int sonarCost, compassCost;
 
     private Upgrade targetUpgrade;
 
@@ -19,9 +19,11 @@ public class UpgradeMenu : MonoBehaviour, ICloseableMenu
     {
         createButton.interactable = false;
         sonarUpgrade.interactable = !entityPlayer.hasSonar && BaseController.Main.ore >= sonarCost;
+        compassUpgrade.interactable = !entityPlayer.hasCompass && BaseController.Main.ore >= compassCost;
     }
 
     public void TargetSonar() => SetUpgradeTarget(Upgrade.Sonar);
+    public void TargetCompass() => SetUpgradeTarget(Upgrade.Compass);
 
     public void SetUpgradeTarget(Upgrade upgrade)
     {
@@ -38,17 +40,26 @@ public class UpgradeMenu : MonoBehaviour, ICloseableMenu
             case Upgrade.Sonar:
                 AddSonar();
                 break;
+            case Upgrade.Compass:
+                AddCompass();
+                break;
         }
 
         SetUpgradeTarget(Upgrade.None);
     }
 
-    public void AddSonar()
+    private void AddSonar()
     {
         entityPlayer.hasSonar = true;
         BaseController.Main.ore -= sonarCost;
         sonarUpgrade.interactable = false;
-        targetUpgrade = Upgrade.None;
+    }
+
+    private void AddCompass()
+    {
+        entityPlayer.hasCompass = true;
+        BaseController.Main.ore -= compassCost;
+        compassUpgrade.interactable = false;
     }
 
     public void Close()
@@ -61,5 +72,6 @@ public class UpgradeMenu : MonoBehaviour, ICloseableMenu
     {
         None,
         Sonar,
+        Compass,
     }
 }
