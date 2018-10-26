@@ -100,7 +100,7 @@ AudioSource:
   m_audioClip: {fileID: 8300000, guid: d1ce389d2a4a7c6468dbe29552c53db3, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 0.2
-  m_Pitch: 0.6
+  m_Pitch: 0.45
   Loop: 0
   Mute: 0
   Spatialize: 0
@@ -108,9 +108,9 @@ AudioSource:
   Priority: 128
   DopplerLevel: 1
   MinDistance: 1
-  MaxDistance: 500
+  MaxDistance: 100
   Pan2D: 0
-  rolloffMode: 0
+  rolloffMode: 1
   BypassEffects: 0
   BypassListenerEffects: 0
   BypassReverbZones: 0
@@ -196,7 +196,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   activationTime: 1
   tilePos: {x: 0, y: 0}
-  sonarSfx: {fileID: 0}
+  sonarSfx: {fileID: 82053317707985324}
 --- !u!136 &136207438251667102
 CapsuleCollider:
   m_ObjectHideFlags: 1
