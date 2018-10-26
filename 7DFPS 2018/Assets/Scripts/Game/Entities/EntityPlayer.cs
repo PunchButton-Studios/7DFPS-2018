@@ -321,7 +321,8 @@ public class EntityPlayer : Entity
 
     private void DecreaseEnergy()
     {
-        energy -= (passiveEnergyCost + (flashlightEnergyCost * flashlightTransition)) * Time.deltaTime;
+        if (!isCharging)
+            energy -= (passiveEnergyCost + (flashlightEnergyCost * flashlightTransition)) * Time.deltaTime;
         energy = Mathf.Clamp01(energy);
 
         if (!playedBatteryAlarm && energy < 0.3333f)
