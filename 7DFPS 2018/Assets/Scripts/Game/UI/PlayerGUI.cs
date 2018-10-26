@@ -11,6 +11,9 @@ public class PlayerGUI : MonoBehaviour
     public Image anxietyOverlay;
     public Image activationProgressCircle;
 
+    public Image faderImage;
+    public AnimationCurve faderImageCurve;
+
     public Image batteryImage, batteryBarImage, batteryChargeImage, batteryChargeProgressImage;
     public Color[] batteryColors = new Color[4] { Color.gray, Color.red, Color.yellow, Color.green };
 
@@ -125,6 +128,10 @@ public class PlayerGUI : MonoBehaviour
         float progress = time / maxTime;
         timerBarImage.fillAmount = progress;
         timerBarImage.color = progressCircleColorGradient.Evaluate(progress);
+
+        Color faderColor = faderImage.color;
+        faderColor.a = faderImageCurve.Evaluate(1 - progress);
+        faderImage.color = faderColor;
     }
 
     private void UpdateSonarInfo(bool hasSonar, float sonarCooldown, float sonarCooldownMax)

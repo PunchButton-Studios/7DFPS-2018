@@ -63,6 +63,23 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &1055982600385934
+GameObject:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 224650249723042728}
+  - component: {fileID: 222360518674800742}
+  - component: {fileID: 114546329903068814}
+  m_Layer: 10
+  m_Name: Fader
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &1067588007241922
 GameObject:
   m_ObjectHideFlags: 1
@@ -2875,6 +2892,31 @@ MonoBehaviour:
   targetText: {fileID: 114139287449934982}
   anxietyOverlay: {fileID: 114273996915686642}
   activationProgressCircle: {fileID: 114731872000778120}
+  faderImage: {fileID: 114546329903068814}
+  faderImageCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0.99
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 104.18473
+      outSlope: 104.18473
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.31130344
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   batteryImage: {fileID: 114884076487566310}
   batteryBarImage: {fileID: 114382549383034294}
   batteryChargeImage: {fileID: 114895257855984700}
@@ -3672,6 +3714,33 @@ MonoBehaviour:
   m_FillAmount: 0
   m_FillClockwise: 1
   m_FillOrigin: 2
+--- !u!114 &114546329903068814
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1055982600385934}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0, g: 0, b: 0, a: 0}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
 --- !u!114 &114579011097818444
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4087,6 +4156,7 @@ MonoBehaviour:
   controller: {fileID: 143574555526646670}
   head: {fileID: 4652609862889248}
   playerBase: {fileID: 0}
+  resultSceneName: Results Screen
   horizontalLookAxis: Mouse X
   verticalLookAxis: Mouse Y
   movementSpeed: 10
@@ -4113,6 +4183,30 @@ MonoBehaviour:
   timeLimit: 1800
   maxTimeLimit: 1800
   anxietyTimeDecrease: 2
+  soundFadeCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0.99
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: -140.00012
+      outSlope: -140.00012
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.25
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   flashlight: {fileID: 108327680211744820}
   flashlightToggleSpeed: 0.7
   flashlightIntensity: 400
@@ -5131,6 +5225,13 @@ CanvasRenderer:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1933325380069600}
   m_CullTransparentMesh: 0
+--- !u!222 &222360518674800742
+CanvasRenderer:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1055982600385934}
+  m_CullTransparentMesh: 0
 --- !u!222 &222371991532077708
 CanvasRenderer:
   m_ObjectHideFlags: 1
@@ -5627,6 +5728,7 @@ RectTransform:
   - {fileID: 224386834102438798}
   - {fileID: 224506785568572030}
   - {fileID: 224076443597706098}
+  - {fileID: 224650249723042728}
   m_Father: {fileID: 4642867996469832}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -5952,6 +6054,24 @@ RectTransform:
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 136, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!224 &224650249723042728
+RectTransform:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1055982600385934}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 224352808202163274}
+  m_RootOrder: 13
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224700174592570296
 RectTransform:

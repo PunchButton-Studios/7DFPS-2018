@@ -7,6 +7,8 @@ public class EntityPlayer : Entity
     public CharacterController controller;
     public Transform head, playerBase;
 
+    public string resultSceneName;
+
     [Header("Input")]
     public string horizontalLookAxis = "Mouse X";
     public string verticalLookAxis = "Mouse Y";
@@ -45,6 +47,7 @@ public class EntityPlayer : Entity
     public float timeLimit = 1800.0f;
     public float maxTimeLimit = 1800.0f;
     public float anxietyTimeDecrease = 2.0f;
+    public AnimationCurve soundFadeCurve;
 
     [Header("Flashlight")]
     public Light flashlight;
@@ -358,6 +361,12 @@ public class EntityPlayer : Entity
             return; //Just don't.
 
         timeLimit -= (1 + (anxiety / maxAnxiety) * anxietyTimeDecrease) * Time.deltaTime;
+
+        if(timeLimit < 0.0f)
+        {
+            ResultScreen.depth = GameManager.Main.depth;
+            UnityEngine.SceneManagement.SceneManager.LoadScene(resultSceneName, UnityEngine.SceneManagement.LoadSceneMode.Single);
+        }
     }
 
     private void DecreaseEnergy()
@@ -437,6 +446,8 @@ public class EntityPlayer : Entity
         criticalAnxietySfx.volume = Mathf.MoveTowards(criticalAnxietySfx.volume, anxietyPercentage > anxietyCriticalPoint ? anxietyCriticalMaxVolume : 0, anxietyCriticalSpeed * Time.deltaTime);
         cameraController.FOV = anxietyFieldOfViewCurve.Evaluate(anxietyPercentage);
         cameraController.Shake(anxietyCameraShakeCurve.Evaluate(anxietyPercentage));
+
+        AudioListener.volume = Config.Main.volume * soundFadeCurve.Evaluate(1 - (timeLimit / maxTimeLimit));
     }
 
     private void OnDrawGizmosSelected()
