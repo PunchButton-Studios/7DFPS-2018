@@ -62,6 +62,7 @@ public class EntityPlayer : Entity
     public bool isCharging = false;
     public float flashlightEnergyCost = 0.001f;
     public float passiveEnergyCost = 0.0001f;
+    public float energyLossFromKobolds = 0.0002f;
 
     [Header("Home Calling")]
     public Vector3 homeCallFreeSpaceRange;
@@ -377,7 +378,7 @@ public class EntityPlayer : Entity
     private void DecreaseEnergy()
     {
         if (!isCharging)
-            energy -= (passiveEnergyCost + (flashlightEnergyCost * flashlightTransition)) * Time.deltaTime;
+            energy -= (passiveEnergyCost + (flashlightEnergyCost * flashlightTransition) + (energyLossFromKobolds * KoboldSpawner.Main.KoboldCount)) * Time.deltaTime;
         energy = Mathf.Clamp01(energy);
 
         if (!playedBatteryAlarm && energy < 0.3333f)

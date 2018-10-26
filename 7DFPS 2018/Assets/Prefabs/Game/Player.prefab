@@ -4364,6 +4364,7 @@ MonoBehaviour:
   isCharging: 0
   flashlightEnergyCost: 0.003
   passiveEnergyCost: 0.0006
+  energyLossFromKobolds: 0.001
   homeCallFreeSpaceRange: {x: 5, y: 0.5, z: 5}
   homeCallCollisionMask:
     serializedVersion: 2
