@@ -4424,6 +4424,7 @@ MonoBehaviour:
   homeCallTimeMultiplier: 0.0035
   homeCallKoboldTimerDecrease: 0.3
   hasSonar: 0
+  sonarEnergyCost: 0.01
   sonarKoboldTimerDecrease: 1.2
   sonarCooldown: 0
   sonarCooldownMax: 5
@@ -4431,7 +4432,7 @@ MonoBehaviour:
   sonarDelayPerDistance: 0.01
   sonarMask:
     serializedVersion: 2
-    m_Bits: 1025
+    m_Bits: 5121
   sonarSfx: {fileID: 82585201460183740}
   hasCompass: 0
   viewRange: 50
