@@ -12,6 +12,7 @@ public class MainMenu : MonoBehaviour
     private void Awake()
     {
         Config.Apply();
+        Time.timeScale = 1.0f;
     }
 
     public void SwitchActivePanel(GameObject panel)
