@@ -277,8 +277,8 @@ public class WorldGenerator : MonoBehaviour
                     GameObject ceilingObject = Instantiate(ceilingPrefab, worldPosition + Vector3.up * scale, ceilingPrefab.transform.rotation);
                     if (!chunks.ContainsKey(chunk))
                         chunks.Add(chunk, new Chunk());
-                    chunks[chunk].meshFilters.AddRange(floorObject.GetComponentsInChildren<MeshFilter>());
-                    chunks[chunk].meshFilters.AddRange(ceilingObject.GetComponentsInChildren<MeshFilter>());
+                    chunks[chunk].AddMeshFilters(floorObject.GetComponentsInChildren<MeshFilter>(), floorObject.GetComponentsInChildren<MeshRenderer>());
+                    chunks[chunk].AddMeshFilters(ceilingObject.GetComponentsInChildren<MeshFilter>(), ceilingObject.GetComponentsInChildren<MeshRenderer>());
                     PlaceWalls(x, y, chunks[chunk]);
 
                     byte tileSaveData = 0;
@@ -322,7 +322,7 @@ public class WorldGenerator : MonoBehaviour
                     rotation
                     );
 
-                chunk.meshFilters.AddRange(wallObject.GetComponentsInChildren<MeshFilter>());
+                chunk.AddMeshFilters(wallObject.GetComponentsInChildren<MeshFilter>(), wallObject.GetComponentsInChildren<MeshRenderer>());
                 chunk.destroyObjects.Add(wallObject);
             }
 
@@ -368,28 +368,47 @@ public class WorldGenerator : MonoBehaviour
         }
     }
 
+    //Optimization part.
     private void CombineMeshes(Chunk chunk, Vector2Int pos, Transform chunkHolder)
     {
         CombineInstance[] combineInstances = new CombineInstance[chunk.meshFilters.Count];
+        MeshFilter[] meshFilters = new MeshFilter[combineInstances.Length];
         List<Material> materials = new List<Material>();
-        for(int i = 0; i < chunk.meshFilters.Count; i++)
-        {
-            combineInstances[i].mesh = chunk.meshFilters[i].sharedMesh;
-            combineInstances[i].transform = chunk.meshFilters[i].transform.localToWorldMatrix;
 
-            MeshRenderer meshRenderer = chunk.meshFilters[i].GetComponent<MeshRenderer>();
-            foreach(Material mat in meshRenderer.materials)
+        //We'll first grab all the meshes based on materials and combine the ones that share the same material.
+        //We'll merge the submeshes because they all share the same material.
+        int di = 0;
+        foreach(Material m in chunk.meshFilters.Keys)
+        {
+            CombineInstance[] subInstances = new CombineInstance[chunk.meshFilters[m].Count];
+            for(int i = 0; i < chunk.meshFilters[m].Count; i++)
             {
-                if (!materials.Contains(mat))
-                    materials.Add(mat);
+                subInstances[i].mesh = chunk.meshFilters[m][i].sharedMesh;
+                subInstances[i].transform = chunk.meshFilters[m][i].transform.localToWorldMatrix;
+                Destroy(chunk.meshFilters[m][i].gameObject);
             }
 
-            Destroy(chunk.meshFilters[i].gameObject);
+            GameObject tempObject = new GameObject();
+            MeshFilter meshFilter = tempObject.AddComponent<MeshFilter>();
+            meshFilter.mesh = new Mesh();
+            meshFilter.mesh.CombineMeshes(subInstances, true);
+            meshFilters[di] = meshFilter;
+            materials.Add(m);
+            di++;
+        }
+
+        //Then we grab the results of that and combine them once again.
+        //This time we don't merge the submeshes because they do not share the same material.
+        for(int i = 0; i < combineInstances.Length; i++)
+        {
+            combineInstances[i].mesh = meshFilters[i].sharedMesh;
+            combineInstances[i].transform = meshFilters[i].transform.localToWorldMatrix;
+            Destroy(meshFilters[i].gameObject);
         }
 
         GameObject chunkObject = new GameObject($"Chunk ({pos.ToString()})");
         MeshRenderer chunkRenderer = chunkObject.AddComponent<MeshRenderer>();
-        chunkRenderer.materials = materials.ToArray();
+        chunkRenderer.sharedMaterials = materials.ToArray();
         MeshFilter chunkMesh = chunkObject.AddComponent<MeshFilter>();
         chunkMesh.mesh = new Mesh();
         chunkMesh.mesh.CombineMeshes(combineInstances, false);
@@ -403,7 +422,10 @@ public class WorldGenerator : MonoBehaviour
         chunkHandler.scale = CHUNK_SIZE * scale;
         chunkHandler.chunkRenderers.Add(pos, chunkRenderer);
 
+        //We'll mark them for static batching (this means no moving tunnels!)
         StaticBatchingUtility.Combine(chunkHandler.gameObject);
+
+        //And bang, smooth fps again.
     }
 
     private struct QueuedTile
@@ -419,8 +441,19 @@ public class WorldGenerator : MonoBehaviour
 
     private class Chunk
     {
-        public List<MeshFilter> meshFilters = new List<MeshFilter>();
+        public Dictionary<Material,List<MeshFilter>> meshFilters = new Dictionary<Material,List<MeshFilter>>();
         public List<GameObject> destroyObjects = new List<GameObject>();
+
+        public void AddMeshFilters(MeshFilter[] meshFilters, MeshRenderer[] meshRenderers)
+        {
+            for(int i = 0; i < meshFilters.Length; i++)
+            {
+                Material sharedMaterial = meshRenderers[i].sharedMaterial;
+                if (!this.meshFilters.ContainsKey(sharedMaterial))
+                    this.meshFilters.Add(sharedMaterial, new List<MeshFilter>());
+                this.meshFilters[sharedMaterial].Add(meshFilters[i]);
+            }
+        }
     }
 
     public enum MapTile : byte
