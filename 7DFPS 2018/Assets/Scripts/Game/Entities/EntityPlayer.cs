@@ -440,7 +440,7 @@ public class EntityPlayer : Entity
             stepTimes.RemoveAt(0);
         }
         
-        jointAudio.Volume = Mathf.MoveTowards(jointAudio.Volume, isMoving ? 1 : 0, (isMoving ? jointVolumeIncreaseSpeed : jointVolumeDecreaseSpeed));
+        jointAudio.Volume = Mathf.MoveTowards(jointAudio.Volume, isMoving ? 0.3F : 0, (isMoving ? jointVolumeIncreaseSpeed : jointVolumeDecreaseSpeed));
 
         if (GameManager.GamePaused)
             rotationChange = 0.0f;
